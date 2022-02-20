@@ -27,13 +27,13 @@ conn.sync({ force: true }).then(() => {
 
     //Precargar Types a la tabla.
     await Type.create({
-      nombre: 'Gluten Free'
+      name: 'Gluten Free'
     });
     await Type.create({
-      nombre: 'Ketogenic'
+      name: 'Ketogenic'
     });
     await Type.create({
-      nombre: 'Vegetarian'
+      name: 'Vegetarian'
     })
   });
 });
