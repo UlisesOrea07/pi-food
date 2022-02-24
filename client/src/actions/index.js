@@ -1,5 +1,5 @@
 const GET_RECIPES = 'GET_RECIPES';
-const GET_ALL_RECIPES = 'GET_ALL_RECIPES';
+const INIT = 'INIT';
 const URL = 'http://localhost:3001'
 
 export const getRecipes = (title) => {
@@ -11,15 +11,19 @@ export const getRecipes = (title) => {
                     type: GET_RECIPES,
                     payload: jso
                 })
-            })
+            });
     }
 }
 
-// export const getAllRecipes = () => {
-//     return dispatch => {
-//         dispatch({
-//             type: GET_ALL_RECIPES,
-//             payload: json
-//         })
-//     }
-// } 
+export const getAllRecipes = () => {
+    return dispatch => {
+        return fetch(URL + '/recipes')
+            .then(response => response.json())
+            .then(jso => {
+                dispatch({
+                    type: INIT,
+                    payload: jso
+                })
+            })
+    }
+} 

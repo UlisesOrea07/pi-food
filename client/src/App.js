@@ -1,12 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getAllRecipes } from './services/services'
-import Banner from './components/Banner/Banner'
-import Description from './components/Description/Description';
-import Footer from './components/Footer/Footer';
-import Presentation from './components/Presentation/Presentation';
-import Layout from './components/Layout/Layout'
+
+import LandingLayout from './components/Layout/LandingLayout'
+import { getAllRecipes } from './actions/index'
 import Cards from './components/Cards/Cards';
 import NavBar from './components/NavBar/NavBar';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -14,24 +11,26 @@ import SearchBar from './components/SearchBar/SearchBar';
 
 
 function App() {
-  // const dispatch = useDispatch();
-  // const recipes = dispatch(getAllRecipes())
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllRecipes())
+  }, [dispatch])
+
   return (
     <>
-      {/* <Layout>
-        <Banner />
-        <Description />
-        <Presentation />
-        <Footer />
-      </Layout> */}
+
       <NavBar />
       <SearchBar />
+
       <Routes>
         <Route
+          path='/'
+          element={<LandingLayout />} />
+        <Route
           path='home'
-          element={<Cards />}>
-        </Route>
-      </Routes>
+          element={<Cards />} />
+
+      </Routes >
     </>
 
 

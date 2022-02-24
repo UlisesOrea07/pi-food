@@ -5,7 +5,10 @@ const initialState = {
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'INIT':
-            return action.payload
+            return {
+                ...state,
+                recipesLoaded: action.payload
+            }
         case 'GET_RECIPES':
             return {
                 ...state,

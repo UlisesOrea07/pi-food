@@ -2,19 +2,19 @@ import React from "react";
 import styled from "styled-components";
 const Nav = styled.div`
     background-color: beige;
-    position: static;
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     margin-bottom: 20px;
     padding: 10px;
-    width: 99%;
+    width: 100%;
 `;
+const PageName = styled.h1``;
 const NavBar = () => {
     return (
         <Nav>
-            <p>hfhdsf</p>
-            <p>gdfsgdfgdfg</p>
+            <PageName>FOOD, RECIPES AND COCKING</PageName>
         </Nav>
     );
 }

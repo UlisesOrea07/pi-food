@@ -4,12 +4,13 @@ import { getRecipes } from "../../actions";
 import { useDispatch } from "react-redux";
 
 const Container = styled.form`
-    position: absolute;
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    flex-wrap: wrap;
     width: 100%;
+    margin: 20px;
+    border-bottom: 1px solid;
 `;
 const SearchBox = styled.input.attrs({
     type: 'text',
@@ -22,13 +23,31 @@ const SearchBox = styled.input.attrs({
     margin-right: 10px;
     font-size: 17px;
     width: 50%;
+    outline:none;
+`;
+const Div = styled.div`
+    display: flex;
+    margin: 5px;
+    width: 50%;
 `;
 
-const Button = styled.button.attrs({
+const SearchButton = styled.button.attrs({
     type: "submit"
 })`
-
+   	padding: 0;
+	background-color: #2ecc71;
+	border: none;
+	border-radius: 1px; 	
+	color: white;
+	text-transform: uppercase;
+	overflow: hidden; 	
 `;
+
+const ButtonOrder = styled.button`
+    margin: 10px;
+    padding: 5px;
+`;
+
 const SearchBar = () => {
     const [state, setState] = useState({ title: '' });
     const dispatch = useDispatch();
@@ -43,10 +62,20 @@ const SearchBar = () => {
     }
     return (
         <Container onSubmit={(e) => handleSubmit(e)}>
-            <SearchBox onChange={e => handleChange(e)} />
-            <Button >
-                Buscar
-            </Button>
+
+            <Div>
+                <SearchBox onChange={e => handleChange(e)} />
+                <SearchButton >
+                    Buscar
+                </SearchButton>
+            </Div>
+            <ButtonOrder>
+                A-Z
+            </ButtonOrder>
+
+            <ButtonOrder>
+                asc-des
+            </ButtonOrder>
         </Container>
     )
 }
