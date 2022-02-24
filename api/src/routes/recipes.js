@@ -4,8 +4,8 @@ const router = require('express').Router();
 const fetch = require('node-fetch');
 const checkKey = require('../utils/checkApiKeys')
 const URL = 'https://api.spoonacular.com/recipes/'
-const { API_KEY, SECAPI_KEY, TERAPI_KEY, CUARAPI_KEY, QUINAPI_KEY, SECTAPI_KEY, SEPTAPI_KEY, OCTAPI_KEY } = process.env;
-const keys = [API_KEY, SECAPI_KEY, TERAPI_KEY, CUARAPI_KEY, QUINAPI_KEY, SECTAPI_KEY, SEPTAPI_KEY, OCTAPI_KEY];
+const { API_KEY, SECAPI_KEY, TERAPI_KEY, CUARAPI_KEY, SECTAPI_KEY, SEPTAPI_KEY, OCTAPI_KEY } = process.env;
+const keys = [API_KEY, SECAPI_KEY, TERAPI_KEY, CUARAPI_KEY, SECTAPI_KEY, SEPTAPI_KEY, OCTAPI_KEY];
 //https://api.spoonacular.com/recipes/complexSearch?apiKey=d18d943ce8944e3d8e6354cc5c759233&number=100
 //https://api.spoonacular.com/recipes/1/information?apiKey=d18d943ce8944e3d8e6354cc5c759233
 
@@ -35,6 +35,7 @@ router.get('/recipes', async (req, res) => {
     // }
     try {
         const keyOn = await checkKey(keys, URL, 'complexSearch');
+        console.log(keyOn)
         if (keyOn.found) {
             let resp = await fetch(`${URL}complexSearch?apiKey=${keyOn.key}&addRecipeInformation=true&number=200`)
 
