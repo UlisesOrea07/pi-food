@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 // const srcImg = "https://spoonacular.com/recipeImages/716426-312x231.jpg";
 
 const CardContainer = styled.div`
     display: flex;
     flex-direction: column;
-    width: 200px;
+    width: 350px;
     position: relative;
     margin: 10px;
     padding:0 ;
@@ -52,11 +53,12 @@ const Tag = styled.div`
     margin:3px;
     padding: 2px 5px;
 `;
-const Card = ({ key, health, score, image, title, diets }) => {
+const Card = ({ id, health, score, image, title, diets }) => {
     return (
         <CardContainer>
             <ImagenBox>
                 <Image src={image} alt='none' />
+                <Link to={`/detail/${id}`}>{title}</Link>
             </ImagenBox>
             <InfoBox>
                 <span>Health: {health}</span>

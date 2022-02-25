@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import Card from "../Card/Card"
 import Pagination from "../Pagination/Pagination";
-
 const CardsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
@@ -21,23 +20,20 @@ const Cards = () => {
     const [state, setState] = useState({ currentPage: null, totalPages: null })
     const [currentRecipes, setCurrentRecipes] = useState([]);
     // const allRecipes = useSelector(state => state.recipesLoaded)
-    console.log(recipes)
-    console.log(currentRecipes + 'soy current')
+
     const onPageChanged = data => {
         console.log('click click')
         const allRecipes = recipes;
         const { currentPage, totalPages, pageLimit } = data;
         const offset = (currentPage - 1) * pageLimit;
-        console.log(offset + 'soyyyyyysysysysyy offset')
         const currentRecipes = allRecipes.slice(offset, offset + pageLimit);
         setState({ currentPage, totalPages });
         setCurrentRecipes(currentRecipes);
     }
     const { currentPage, totalPages } = state;
     const totalRecipes = recipes.length;
-    console.log(recipes.length)
-    console.log('holaa' + currentRecipes + 'paginaaaaassssss')
     if (totalRecipes === 0) return <h2>No hay nada pa mostrar</h2>;
+    console.log('cargadossssssssss')
     return (
         <>
             < DivPagination>
@@ -46,8 +42,9 @@ const Cards = () => {
             <CardsContainer>
                 {
                     currentRecipes?.map(recipe =>
+                        //<div key={recipe.id}>
                         <Card
-                            key={recipe.id}
+                            id={recipe.id}
                             health={recipe.healthScore}
                             score={recipe.spoonacularScore}
                             image={recipe.image}

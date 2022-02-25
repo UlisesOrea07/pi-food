@@ -1,10 +1,12 @@
 const GET_RECIPES = 'GET_RECIPES';
+const GET_RECIPE_DETAIL = 'GET_RECIPE_DETAIL';
 const INIT = 'INIT';
-const URL = 'http://localhost:3001'
+const UPDATE = 'UPDATE';
+const BASEURL = 'http://localhost:3001'
 
 export const getRecipes = (title) => {
     return function (dispatch) {
-        return fetch(URL + '/recipes?name=' + title)
+        return fetch(BASEURL + '/recipes?name=' + title)
             .then(response => response.json())
             .then(jso => {
                 dispatch({
@@ -17,7 +19,7 @@ export const getRecipes = (title) => {
 
 export const getAllRecipes = () => {
     return dispatch => {
-        return fetch(URL + '/recipes')
+        return fetch(BASEURL + '/recipes')
             .then(response => response.json())
             .then(jso => {
                 dispatch({
@@ -26,4 +28,26 @@ export const getAllRecipes = () => {
                 })
             })
     }
-} 
+}
+
+export const getRecipeDetail = (id) => {
+    return dispatch => {
+        return fetch(BASEURL + '/recipes/' + id)
+            .then(response => { response.json() })
+            .then(jso => {
+                dispatch({
+                    type: GET_RECIPE_DETAIL,
+                    payload: jso
+                })
+            })
+    }
+}
+
+export const update = (array) => {
+    return dispatch => {
+        dispatch({
+            type: UPDATE,
+            payload: array
+        })
+    }
+}
