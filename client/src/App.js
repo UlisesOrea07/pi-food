@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import LandingLayout from './components/Layout/LandingLayout'
 import { getAllRecipes } from './actions/index'
@@ -12,6 +12,8 @@ import SearchBar from './components/SearchBar/SearchBar';
 
 function App() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     dispatch(getAllRecipes())
   }, [dispatch])
@@ -28,9 +30,9 @@ function App() {
           element={<LandingLayout />} />
         <Route
           path='home'
-          element={<Cards />} />
-
+          element={<Cards loading={loading} />} />
       </Routes >
+
     </>
 
 

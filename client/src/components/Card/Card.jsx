@@ -7,6 +7,7 @@ const CardContainer = styled.div`
     flex-direction: column;
     width: 200px;
     position: relative;
+    margin: 10px;
     padding:0 ;
     border-top: 20px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.377);    
@@ -21,25 +22,28 @@ const Image = styled.img`
     border-radius: 20px 20px 0 0;
 `;
 const InfoBox = styled.div`
-    margin: 5px;
+    margin: 10px;
     display: flex;
     flex-direction: row;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     justify-content: space-between;
     border-bottom: 1px solid;
-    border-color: azure;
+    border-color: #70757582;
 `;
 const TitleBox = styled.div`
-    text-align: left;
-    margin: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: left;    
+    font-weight: bold;
+    margin: 1px 10px 10px 10px;
 `;
 const TagsBox = styled.div`
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: left;
     margin: 5px;
 `;
 const Tag = styled.div`
-    background-color: blueviolet;
+    background-color: #79580cc3;
     border-radius: 8px;
     color: white;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -48,7 +52,7 @@ const Tag = styled.div`
     margin:3px;
     padding: 2px 5px;
 `;
-const Card = ({ health, score, image, title, diets }) => {
+const Card = ({ key, health, score, image, title, diets }) => {
     return (
         <CardContainer>
             <ImagenBox>
