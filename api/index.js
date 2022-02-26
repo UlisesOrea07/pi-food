@@ -25,15 +25,13 @@ conn.sync({ force: true }).then(() => {
   server.listen(3001, async () => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
 
-    //Precargar Types a la tabla.
-    await Type.create({
-      name: 'Gluten Free'
-    });
-    await Type.create({
-      name: 'Ketogenic'
-    });
-    await Type.create({
-      name: 'Vegetarian'
+    //Precargar Diets Types a la tabla.
+    const diets = ['gluten free', 'dairy free', 'lacto ovo vegetarian', 'vegan', 'paleolithic', 'primal', 'pescatarian', 'whole 30']
+    diets?.map(async diet => {
+      await Type.create({
+        name: diet
+      });
     })
+
   });
 });
