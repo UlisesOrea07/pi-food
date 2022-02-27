@@ -32,7 +32,7 @@ export const getAllRecipes = () => {
 
 export const getRecipeDetail = (id) => {
     return dispatch => {
-        return fetch(BASEURL + '/recipes/' + id)
+        return fetch(`${BASEURL}/recipes/${id}`)
             .then(response => { response.json() })
             .then(jso => {
                 dispatch({

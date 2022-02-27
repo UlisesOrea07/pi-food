@@ -1,4 +1,5 @@
 import React from "react";
+import UploadImage from "../UploadImage/UploadImage";
 const Form = () => {
     return (
 
@@ -8,23 +9,18 @@ const Form = () => {
                     <label>
                         Title:
                     </label>
-                    <input>
-                    </input>
                 </div>
                 <div>
                     <label>
                         Image:
                     </label>
-                    <inpu>
-
-                    </inpu>
+                    {/* <UploadImage /> */}
                 </div>
                 <div>
                     <label>
                         Healt:
                     </label>
-                    <input>
-                    </input>
+
                 </div>
                 <div>
                     <label>
@@ -35,8 +31,6 @@ const Form = () => {
                     <label>
                         Summary:
                     </label>
-                    <input>
-                    </input>
                 </div>
                 <div>
                     <label>

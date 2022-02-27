@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import LandingLayout from './components/Layout/LandingLayout'
@@ -29,12 +29,12 @@ function App() {
           element={<LandingLayout />} />
         <Route
           path='home'
-          element={<Cards />} />
+          element={<Cards recipes={recipes} />} />
         <Route
           path='/detail/:id'
           element={<Details />} />
         <Route
-          pat='add'
+          path='add'
           element={<Form />} />
       </Routes >
     </>

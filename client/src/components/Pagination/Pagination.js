@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const UL = styled.ul`
@@ -36,7 +37,8 @@ const range = (from, to, step = 1) => {
 }
 //totalRecords={totalRecipes} pageLimit={9} pageNeighbours={1} onPageChanged={onPageChanged}
 const Pagination = (props) => {
-    const { totalRecords, pageLimit, pageNeighBours } = props;
+    const recipes = useSelector(state => state.recipesLoaded);
+    const { totalRecords, pageLimit = 9, pageNeighBours = 0 } = props;
     const _pageLimit = typeof pageLimit === 'number' ? pageLimit : 9
     const _totalRecords = typeof totalRecords === 'number' ? totalRecords : 0;
     //pageNeighBours puede ser 0, 1 o 2
@@ -85,7 +87,7 @@ const Pagination = (props) => {
     }
     useEffect(() => {
         gotoPage(1);
-    }, [])
+    }, [recipes])
 
     const gotoPage = page => {
         const { onPageChanged = f => f } = props;
@@ -96,8 +98,8 @@ const Pagination = (props) => {
             pageLimit: _pageLimit,
             totalRecords: _totalRecords
         };
-        setState({ currentPage });
-        return onPageChanged(paginationData);
+        setState({ currentPage })
+        onPageChanged(paginationData);
     }
 
     const handleClick = page => e => {
@@ -121,7 +123,6 @@ const Pagination = (props) => {
     return (
 
         <>
-
             <UL>
                 {pages?.map((page, index) => {
                     if (page === LEFT_PAGE) return (

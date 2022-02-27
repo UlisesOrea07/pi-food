@@ -1,39 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import Card from "../Card/Card"
 import Pagination from "../Pagination/Pagination";
+import Loading from "../Loading/Loading";
+
 const CardsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 `;
+// const DivKey = styled.div`
+//     padding: 0;
+// `;
 const DivPagination = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
 `;
-const Cards = () => {
-    const recipes = useSelector(state => state.recipesLoaded)
-    console.log(recipes);
+const Cards = ({ recipes }) => {
+    // const recipes = useSelector(state => state.recipesLoaded);
     //pagination
-    const [state, setState] = useState({ currentPage: null, totalPages: null })
+    //const [state, setState] = useState({ currentPage: null, totalPages: null })
     const [currentRecipes, setCurrentRecipes] = useState([]);
+
+    console.log('Recetas:::: ' + currentRecipes)
     // const allRecipes = useSelector(state => state.recipesLoaded)
 
     const onPageChanged = data => {
-        console.log('click click')
         const allRecipes = recipes;
         const { currentPage, totalPages, pageLimit } = data;
         const offset = (currentPage - 1) * pageLimit;
         const currentRecipes = allRecipes.slice(offset, offset + pageLimit);
-        setState({ currentPage, totalPages });
+        // setState({ currentPage, totalPages });
+        console.log('antes set' + currentRecipes)
         setCurrentRecipes(currentRecipes);
+        console.log('despues set ' + currentRecipes)
     }
-    const { currentPage, totalPages } = state;
+
+
+    console.log(currentRecipes + 'fuera d efuncion onpage')
+    // const { currentPage, totalPages } = state;
     const totalRecipes = recipes.length;
-    if (totalRecipes === 0) return <h2>No hay nada pa mostrar</h2>;
-    console.log('cargadossssssssss')
+    if (totalRecipes === 0) return <Loading />
     return (
         <>
             < DivPagination>
@@ -41,8 +50,7 @@ const Cards = () => {
             </DivPagination>
             <CardsContainer>
                 {
-                    currentRecipes?.map(recipe =>
-                        //<div key={recipe.id}>
+                    currentRecipes?.map((recipe) =>
                         <Card
                             id={recipe.id}
                             health={recipe.healthScore}
@@ -51,7 +59,6 @@ const Cards = () => {
                             title={recipe.title}
                             diets={recipe.diets}
                         />
-
                     )
                 }
 
