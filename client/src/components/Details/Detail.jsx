@@ -15,8 +15,7 @@ const Details = () => {
 
     useEffect(() => {
         dispatch(getRecipeDetail(id))
-        console.log('efectooo')
-    }, [dispatch])
+    })
 
 
 

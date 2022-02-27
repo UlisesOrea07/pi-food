@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 // const srcImg = "https://spoonacular.com/recipeImages/716426-312x231.jpg";
 
 const CardContainer = styled.div`
@@ -53,25 +52,30 @@ const Tag = styled.div`
     margin:3px;
     padding: 2px 5px;
 `;
+const LINK = styled.a`
+    text-decoration: none;
+`;
 const Card = ({ id, health, score, image, title, diets }) => {
     return (
         <CardContainer>
-            <ImagenBox>
-                <Image src={image} alt='none' />
-                <Link to={`/detail/${id}`}>{title}</Link>
-            </ImagenBox>
-            <InfoBox>
-                <span>Health: {health}</span>
-                <span>Score: {score}</span>
-            </InfoBox>
-            <TitleBox>
-                {title}
-            </TitleBox>
-            <TagsBox>
-                {
-                    diets?.map(diet => <Tag>{diet}</Tag>)
-                }
-            </TagsBox>
+            <LINK href={`/detail/${id}`}>
+                <ImagenBox>
+                    <Image src={image} alt='none' />
+
+                </ImagenBox>
+                <InfoBox>
+                    <span>Health: {health}</span>
+                    <span>Score: {score}</span>
+                </InfoBox>
+                <TitleBox>
+                    {title}
+                </TitleBox>
+                <TagsBox>
+                    {
+                        diets?.map(diet => <Tag key={diet}>{diet}</Tag>)
+                    }
+                </TagsBox>
+            </LINK>
         </CardContainer>
     );
 }

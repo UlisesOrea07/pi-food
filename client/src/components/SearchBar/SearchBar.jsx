@@ -5,48 +5,74 @@ import { useDispatch } from "react-redux";
 import { orderAlphaAsc, orderAlphaDesc, orderScoreAsc, orderScoreDesc } from "../../utils/order";
 
 
-const Container = styled.form`
-    position: relative;
+const Container = styled.div`
+    align-items: center;  
     display: flex;
-    flex-direction: row;
     justify-content: space-evenly;
-    width: 100%;
-    margin: 20px;
-    border-bottom: 1px solid;
+    position: static;    
+`;
+const Form = styled.form`
+    align-items: center;  
+    display: flex;    
+    padding: 0;    
+    position:relative;
+    width: 35%;
 `;
 const SearchBox = styled.input.attrs({
     type: 'text',
-    placeholder: "Buscar recipes"
+    placeholder: "Search Recipes"
 })`    
-    float: right;
-    padding: 6px;
-    border: none;
+    border: 0;
+    margin-right: 0;
+    padding: 2px 0 2px 0;
+    background-color: rgba(255, 255, 255, 0.924) ;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.100);   
+    border-radius: 1rem 0 0 1rem;   
     font-size: 17px;
-    width: 50%;
-    outline:none;
+    outline: none;
+    width:100%;   
 `;
-// const CountResults = styled.h3`
-//     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-//     font-size: 14px;
-//     color: black;
-// `;
+const CountResults = styled.h3`
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 20px;
+    color: black;
+    margin: 0;
+`;
 const Div = styled.div`
     display: flex;
-    margin: 5px;
-    width: 50%;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 20%;
 `;
 
 const SearchButton = styled.button.attrs({
     type: "submit"
 })`
-	background-color: #c3b74bd3;
-    margin: 10px;
-    padding: 5px;
+	background-color: rgba(255, 0, 0, 0.685);    
+    border: none;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.345);
+    color: white;
+    border-radius: 0 1rem 1rem 0;    
+    padding: 4px 20px 4px 20px;
+    
 `;
 
 const ButtonOrder = styled.button`
-    margin: 10px;
-    padding: 5px;
+    margin-right: 2%;
+    padding: 4px 8px 4px 8px;
+    background-color: rgba(255, 0, 0, 0.685);    
+    border: none;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.345);
+    color: white;
+`;
+
+const Span = styled.span`
+    font-family: 'Times New Roman', Times, serif;
+    color: #472b2bdc;
+    margin-right: 5%;
 `;
 
 const SearchBar = ({ recipes }) => {
@@ -86,19 +112,31 @@ const SearchBar = ({ recipes }) => {
     }
     return (
         <Container onSubmit={(e) => handleSubmit(e)}>
-            <Div>
+            <Form>
                 <SearchBox onChange={e => handleChange(e)} />
                 <SearchButton >
                     Buscar
                 </SearchButton>
-            </Div>
-            <ButtonOrder onClick={() => orderAlpha()}>
-                A-Z
-            </ButtonOrder>
+            </Form>
+            <CountResults>
+                Results: {recipes.length}
+            </CountResults>
+            <Div>
+                <Span>
+                    Order By:
+                </Span>
+                <ButtonOrder onClick={() => orderAlpha()}>
+                    A-Z
+                </ButtonOrder>
 
-            <ButtonOrder onClick={() => orderScore()}>
-                &uarr;asc-des&darr;
-            </ButtonOrder>
+                <ButtonOrder onClick={() => orderScore()}>
+                    &uarr; Score &darr;
+                </ButtonOrder>
+                <ButtonOrder >
+                    Health
+                </ButtonOrder>
+            </Div>
+
         </Container>
     )
 }

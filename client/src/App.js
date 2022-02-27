@@ -3,11 +3,12 @@ import { Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import LandingLayout from './components/Layout/LandingLayout'
 import { getAllRecipes } from './actions/index'
-import Cards from './components/Cards/Cards';
 import NavBar from './components/NavBar/NavBar';
-import SearchBar from './components/SearchBar/SearchBar';
 import Form from './components/Recipes/Form';
-import Details from './components/Details/Details';
+import Details from './pages/Details';
+import NotFound from './pages/NotFound';
+import Home from './pages/Home'
+
 //Componentes
 
 
@@ -22,20 +23,22 @@ function App() {
   return (
     <>
       <NavBar />
-      <SearchBar recipes={recipes} />
       <Routes>
         <Route
           path='/'
           element={<LandingLayout />} />
         <Route
-          path='home'
-          element={<Cards recipes={recipes} />} />
+          path='/home'
+          element={<Home recipes={recipes} />} />
         <Route
-          path='/detail/:id'
+          path='/details'
           element={<Details />} />
         <Route
           path='add'
           element={<Form />} />
+        <Route
+          path='*'
+          element={<NotFound />} />
       </Routes >
     </>
   );

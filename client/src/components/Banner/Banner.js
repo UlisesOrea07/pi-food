@@ -27,7 +27,7 @@ const TitleContainer = styled.div`
 const Title = styled.h1`
     color: #fff;
     font-weight: bold;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Lucida Handwriting;
     
 `;
 const Button = styled.button`

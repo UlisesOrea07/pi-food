@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-import Card from "../Card/Card"
-import Pagination from "../Pagination/Pagination";
-import Loading from "../Loading/Loading";
+import Card from "../components/Card/Card"
+import Pagination from "../components/Pagination/Pagination";
+import Loading from "../components/Loading/Loading";
+import SearchBar from "../components/SearchBar/SearchBar"
 
 const CardsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 `;
-// const DivKey = styled.div`
-//     padding: 0;
-// `;
 const DivPagination = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
 `;
-const Cards = ({ recipes }) => {
+const Home = ({ recipes }) => {
     // const recipes = useSelector(state => state.recipesLoaded);
     //pagination
     //const [state, setState] = useState({ currentPage: null, totalPages: null })
@@ -45,7 +42,7 @@ const Cards = ({ recipes }) => {
     if (totalRecipes === 0) return <Loading />
     return (
         <>
-
+            <SearchBar recipes={recipes} />
             <CardsContainer>
                 {
                     currentRecipes?.map((recipe) =>
@@ -70,4 +67,4 @@ const Cards = ({ recipes }) => {
     )
 }
 
-export default Cards;
+export default Home;

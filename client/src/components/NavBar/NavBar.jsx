@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 const Nav = styled.div`
     background-color: beige;
-    position: relative;
+    position: absolute;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    margin-bottom: 20px;
+    margin: 0;
     padding: 10px;
     width: 100%;
 `;
