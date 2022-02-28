@@ -1,6 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ban from "../../images/ban.jpeg"
+import { letter, bars, secundary, bg } from "../../theme/colors";
+
+
 const Container = styled.div`
     display: flex;
     justify-content: center;
@@ -11,7 +15,9 @@ const Container = styled.div`
     background-image: url(${ban});
     background-size: cover;
     background-position: center center center ;   
-    position: relative;    
+    position: fixed;
+    top: 0;
+    width: 100%;
 `;
 const TitleContainer = styled.div`
     position: absolute;
@@ -25,37 +31,41 @@ const TitleContainer = styled.div`
     }    
 `;
 const Title = styled.h1`
-    color: #fff;
+    color: ${bg};
     font-weight: bold;
     font-family: Lucida Handwriting;
     
 `;
 const Button = styled.button`
     text-decoration: none;
-    background-color: transparent;
-    color: #fff;
+    background-color: ${secundary};
+    color: ${letter};
     padding:10px;
-    border: 2px solid red;
+    border: none;
     border-radius: 6px;
     font-size: 20px;
     font-weight: 600;
     block-size: auto;
     cursor: pointer;
     &:hover{
-        background-color: red;
-        color: #ff2
+        background-color: ${bars};
+        color: ${bg};
     }
 `;
 const Banner = () => {
+    console.log(bg)
     return (
         <Container>
             <TitleContainer>
                 <Title>
                     Henry Recipes Food
                 </Title>
-                <Button>
-                    Saber más...
-                </Button>
+
+                <Link to='/home'>
+                    <Button >
+                        Saber más..
+                    </Button>
+                </Link>
             </TitleContainer>
         </Container>
     );

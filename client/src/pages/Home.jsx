@@ -9,6 +9,7 @@ const CardsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    position: relative;
 `;
 const DivPagination = styled.div`
     display: flex;

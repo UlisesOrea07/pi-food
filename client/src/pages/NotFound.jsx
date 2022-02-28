@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { letter, bg } from "../theme/colors";
 const Container = styled.div`
     position: absolute;
     margin: 0;
@@ -11,6 +11,8 @@ const Container = styled.div`
     text-align: center;
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: bold;
+    background-color: ${bg};
+    color: ${letter}
 `;
 const P = styled.p`
     font-size: 50px;

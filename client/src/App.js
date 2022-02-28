@@ -8,6 +8,7 @@ import Form from './components/Recipes/Form';
 import Details from './pages/Details';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home'
+import Principal from './pages/Principal';
 
 //Componentes
 
@@ -26,7 +27,7 @@ function App() {
       <Routes>
         <Route
           path='/'
-          element={<LandingLayout />} />
+          element={<Principal />} />
         <Route
           path='/home'
           element={<Home recipes={recipes} />} />

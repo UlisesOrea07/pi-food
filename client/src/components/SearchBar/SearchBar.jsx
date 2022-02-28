@@ -3,13 +3,15 @@ import styled from "styled-components";
 import { getRecipes, update } from "../../actions";
 import { useDispatch } from "react-redux";
 import { orderAlphaAsc, orderAlphaDesc, orderScoreAsc, orderScoreDesc } from "../../utils/order";
-
+import { letter, bars, secundary, bg } from "../../theme/colors";
 
 const Container = styled.div`
     align-items: center;  
     display: flex;
     justify-content: space-evenly;
-    position: static;    
+    position: relative;
+    margin: 10px;
+
 `;
 const Form = styled.form`
     align-items: center;  
@@ -24,7 +26,7 @@ const SearchBox = styled.input.attrs({
 })`    
     border: 0;
     margin-right: 0;
-    padding: 2px 0 2px 0;
+    padding: 2px 0 2px 4px;
     background-color: rgba(255, 255, 255, 0.924) ;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.100);   
     border-radius: 1rem 0 0 1rem;   
@@ -51,22 +53,26 @@ const Div = styled.div`
 const SearchButton = styled.button.attrs({
     type: "submit"
 })`
-	background-color: rgba(255, 0, 0, 0.685);    
+	background-color: ${bg};    
     border: none;
     box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.345);
-    color: white;
+    color: ${letter};
+    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     border-radius: 0 1rem 1rem 0;    
     padding: 4px 20px 4px 20px;
-    
+    width: 20% ;    
+    cursor: pointer;
 `;
 
 const ButtonOrder = styled.button`
     margin-right: 2%;
     padding: 4px 8px 4px 8px;
-    background-color: rgba(255, 0, 0, 0.685);    
+    background-color: ${bg};    
     border: none;
     box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.345);
-    color: white;
+    color: ${letter};
+    cursor: pointer;
 `;
 
 const Span = styled.span`
