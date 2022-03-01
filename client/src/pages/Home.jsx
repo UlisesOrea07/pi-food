@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Card from "../components/Card/Card"
 import Pagination from "../components/Pagination/Pagination";
 import Loading from "../components/Loading/Loading";
 import SearchBar from "../components/SearchBar/SearchBar"
+import { ERROR, getAllRecipes } from '../actions/index';
+import { useDispatch, useSelector } from "react-redux";
+import NoRecipes from "./NoRecipes";
 
 const CardsContainer = styled.div`
     display: flex;
@@ -17,6 +20,9 @@ const DivPagination = styled.div`
     justify-content: center;
 `;
 const Home = ({ recipes }) => {
+    // const dispatch = useDispatch();
+    const loading = useSelector(state => state.busy);
+    const error = useSelector(state => state.error);
     // const recipes = useSelector(state => state.recipesLoaded);
     //pagination
     //const [state, setState] = useState({ currentPage: null, totalPages: null })
@@ -35,36 +41,37 @@ const Home = ({ recipes }) => {
         setCurrentRecipes(currentRecipes);
         console.log('despues set ' + currentRecipes)
     }
-
-
     console.log(currentRecipes + 'fuera d efuncion onpage')
     // const { currentPage, totalPages } = state;
     const totalRecipes = recipes.length;
-    if (totalRecipes === 0) return <Loading />
+    // 
+
     return (
-        <>
-            <SearchBar recipes={recipes} />
-            <CardsContainer>
-                {
-                    currentRecipes?.map((recipe) =>
-                        <Card
-                            key={recipe.id}
-                            id={recipe.id}
-                            health={recipe.healthScore}
-                            score={recipe.spoonacularScore}
-                            image={recipe.image}
-                            title={recipe.title}
-                            diets={recipe.diets}
-                        />
-                    )
-                }
+        loading ? <Loading /> : error ? <ERROR /> : totalRecipes === 0 ? <NoRecipes /> :
+            <>
+                <SearchBar recipes={recipes} />
+                <CardsContainer>
+                    {
+                        currentRecipes?.map((recipe) =>
+                            <Card
+                                key={recipe.id}
+                                id={recipe.id}
+                                health={recipe.healthScore}
+                                score={recipe.spoonacularScore}
+                                image={recipe.image}
+                                title={recipe.title}
+                                diets={recipe.diets}
+                            />
+                        )
+                    }
 
-            </CardsContainer>
-            < DivPagination>
-                <Pagination totalRecords={totalRecipes} pageLimit={9} pageNeighbours={1} onPageChanged={onPageChanged} />
-            </DivPagination>
-        </>
+                </CardsContainer>
+                < DivPagination>
+                    <Pagination totalRecords={totalRecipes} pageLimit={9} pageNeighbours={1} onPageChanged={onPageChanged} />
+                </DivPagination>
+            </>
 
+        // if (totalRecipes !== 0) setLoading(false)
     )
 }
 

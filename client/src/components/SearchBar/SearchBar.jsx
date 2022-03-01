@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getRecipes, update } from "../../actions";
+import { getRecipes, orderAZ, update } from "../../actions";
 import { useDispatch } from "react-redux";
 import { orderAlphaAsc, orderAlphaDesc, orderScoreAsc, orderScoreDesc } from "../../utils/order";
 import { letter, bars, secundary, bg } from "../../theme/colors";
@@ -80,30 +80,43 @@ const Span = styled.span`
     color: #472b2bdc;
     margin-right: 5%;
 `;
-
+const Changed = styled.span`
+    color: red;
+    font-weight: bolder;
+    font-family: sans-serif;
+    font-size: 14px;
+`;
 const SearchBar = ({ recipes }) => {
     const [state, setState] = useState({ title: '' });
     const [onAlpha, setOnAlpha] = useState(true);
     const [onScore, setOnScore] = useState(true);
+    const [changed, setChanged] = useState('A-Z');
+    const [arrow, setArrow] = useState('%E2%86%91 %E2%86%93');
     const dispatch = useDispatch();
 
-    const orderAlpha = () => {
+    const orderAlpha = (event) => {
+        event.preventDefault();
         if (onAlpha) {
             dispatch(update(orderAlphaAsc(recipes, 'title')));
             setOnAlpha(!onAlpha)
+            setChanged('A-Z')
         } else {
             dispatch(update(orderAlphaDesc(recipes, 'title')));
             setOnAlpha(!onAlpha)
+            setChanged('Z-A')
         }
     }
 
-    const orderScore = () => {
+    const orderScore = (event) => {
+        event.preventDefault();
         if (onScore) {
             dispatch(update(orderScoreAsc(recipes, 'spoonacularScore')));
             setOnScore(!onScore)
+            setArrow('%E2%86%93 %E2%86%91')
         } else {
             dispatch(update(orderScoreDesc(recipes, 'spoonacularScore')));
             setOnScore(!onScore)
+            setArrow('%E2%86%91 %E2%86%93')
         }
 
     }
@@ -131,16 +144,14 @@ const SearchBar = ({ recipes }) => {
                 <Span>
                     Order By:
                 </Span>
-                <ButtonOrder onClick={() => orderAlpha()}>
-                    A-Z
+                <ButtonOrder onClick={(e) => orderAlpha(e)}>
+                    <Changed>{changed[0]}</Changed> - {changed[2]}
                 </ButtonOrder>
 
-                <ButtonOrder onClick={() => orderScore()}>
-                    &uarr; Score &darr;
+                <ButtonOrder onClick={(e) => orderScore(e)}>
+                    Score <Changed>{decodeURI(arrow)} </Changed>
                 </ButtonOrder>
-                <ButtonOrder >
-                    Health
-                </ButtonOrder>
+
             </Div>
 
         </Container>

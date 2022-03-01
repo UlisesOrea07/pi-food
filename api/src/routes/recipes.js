@@ -1,4 +1,4 @@
-const { Recipe, Type } = require('../db');
+const { Recipe, Diet } = require('../db');
 const { Op } = require('sequelize')
 const router = require('express').Router();
 const fetch = require('node-fetch');
@@ -52,6 +52,7 @@ router.get('/recipes', async (req, res) => {
             });
             const recipes = [...recipesApi, ...recipesPg]
             return recipes ? res.json(recipes) : res.status(404).send('Not found');
+
         } else {
             const recipesApi = datApi.results?.map(recipe => {
                 return {
@@ -74,45 +75,63 @@ router.get('/recipes', async (req, res) => {
 
 router.get('/recipes/:id', async (req, res) => {
     const { id } = req.params;
-    if (!isNaN(id)) {
-        console.log('entrooo es numero')
-        //const resp = await fetch(`${URL}${id}/information?apiKey=${API_KEY}`)
-        const keyOn = await checkKey(keys, URL, 'complexSearch')
-        if (!keyOn.found) return res.send(keyOn.message)
-        const resp = await fetch(`${URL}${id}/information?apiKey=${keyOn.key}`)
-        const dataApi = await resp.json();
-        const recipeApi = {
-            id: dataApi.id,
-            title: dataApi.title,
-            summary: dataApi.summary,
-            spoonacularScore: dataApi.spoonacularScore,
-            healthScore: dataApi.healthScore,
-            image: dataApi.image,
-            diets: dataApi.diets,
-            steps: dataApi.steps
-        };
-        return recipeApi ? res.json(recipeApi) : res.status(404).send('Not found');
+    try {
+        if (!isNaN(id)) {
+            //const resp = await fetch(`${URL}${id}/information?apiKey=${API_KEY}`)
+            const keyOn = await checkKey(keys, URL, 'complexSearch')
+            if (!keyOn.found) return res.send(keyOn.message)
+            const resp = await fetch(`${URL}${id}/information?apiKey=${keyOn.key}`)
+            const dataApi = await resp.json();
+            const recipeApi = {
+                id: dataApi.id,
+                title: dataApi.title,
+                summary: dataApi.summary,
+                spoonacularScore: dataApi.spoonacularScore,
+                healthScore: dataApi.healthScore,
+                image: dataApi.image,
+                diets: dataApi.diets,
+                steps: dataApi.analyzedInstructions[0]?.steps
+                // steps: dataApi.analyzedInstructions[0] ? dataApi.analyzedInstructions[0].steps : []
+            };
+            return recipeApi ? res.json(recipeApi) : res.status(404).send('Not found');
+        }
+    } catch (error) {
+        res.send(error);
     }
-    const recipePg = await Recipe.findByPk(id, {
-        include: Type
-    });
-    return recipePg ? res.json(recipePg) : res.status(404).send('Not found');
+    try {
+        const recipePg = await Recipe.findByPk(id, {
+            include: [
+                {
+                    model: Diet,
+                    attributes: ['name'],
+                    through: {
+                        attributes: []
+                    }
+                }]
+        });
+        return recipePg ? res.json(recipePg) : res.status(404).send('Not found');
+    } catch (error) {
+        res.send(error);
+    }
 });
 
 router.post('/recipe', async function (req, res) {
-    const { title, summary, spoonacularScore, healthScore, image, steps, types } = req.body;
-    if (!title, !summary, !spoonacularScore, !healthScore, image, !steps) return res.status(500).send('Todos los campos son necesarios')
-    const recipe = await Recipe.create({
-        title,
-        summary,
-        spoonacularScore,
-        healthScore,
-        image,
-        diets,
-        steps
-    });
-    await recipe.addType(types);
-    res.send('add has been succefully');
+    const { title, summary, spoonacularScore, healthScore, image, steps, diets } = req.body;
+    if (!title, !summary, !spoonacularScore, !healthScore, image, !steps) return res.status(400).send('all field are needed')
+    try {
+        const recipe = await Recipe.create({
+            title,
+            summary,
+            spoonacularScore,
+            healthScore,
+            image,
+            steps
+        });
+        await recipe.addDiet(diets);
+        res.status(201).json({ message: 'created', id: recipe.id });
+    } catch (error) {
+        res.send(error);
+    }
 });
 
 module.exports = router;

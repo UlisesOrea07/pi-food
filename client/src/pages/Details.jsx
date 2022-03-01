@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getRecipeDetail } from "../actions";
+import Loading from "../components/Loading/Loading";
 import { letter, bg } from "../theme/colors";
 
 const Body = styled.div`
@@ -54,61 +58,75 @@ const InfoBox = styled.div`
 const DietsBox = styled.div`
     text-align: left;
 `;
-const SummaryBox = styled.p`
+const SummaryBox = styled.div`
     
 `;
 const Parraf = styled.p``;
 
 const Details = () => {
+
+    const recipe = useSelector(state => state.recipeDetail);
+    const loading = useSelector(state => state.busy);
+    const { id } = useParams();
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getRecipeDetail(id))
+    }, [dispatch])
+
+    console.log(recipe?.steps)
+
     return (
-        <Body>
-            <Container>
-                <TitleBox>
-                    <h1>Camarones</h1>
-                </TitleBox>
-                <Section>
-                    <Side>
-                        <ImageBox>
-                            <img src="https://spoonacular.com/recipeImages/3-556x370.jpg" alt='not found' />
-                        </ImageBox>
-                        <Subtitle>
-                            Information
-                        </Subtitle>
-                        <InfoBox>
-                            <p>Saludable: 100</p>
-                            <p>Score: 100</p>
-                        </InfoBox>
-                        <DietsBox>
+        loading ? <Loading /> :
+            <Body>
+                <Container>
+                    <TitleBox>
+                        <h1>{recipe.title}</h1>
+                    </TitleBox>
+                    <Section>
+                        <Side>
+                            <ImageBox>
+                                <img src={recipe.image} alt='not found' />
+                            </ImageBox>
                             <Subtitle>
-                                Diets:
+                                Information
+                            </Subtitle>
+                            <InfoBox>
+                                <p>Healthy: {recipe.healthScore}</p>
+                                <p>Score: {recipe.spoonacularScore}</p>
+                            </InfoBox>
+                            <DietsBox>
+                                <Subtitle>
+                                    Diets:
+                                </Subtitle>
+                                <ul>
+                                    {recipe.diets?.map(diet => {
+                                        return <li key={diet}> {diet}</li>
+                                    })}
+                                </ul>
+                            </DietsBox>
+
+                        </Side>
+                        <Side>
+                            <SummaryBox>
+                                <Subtitle>
+                                    Summary:
+                                </Subtitle>
+                                <Parraf>
+                                    {(recipe.summary)}
+                                </Parraf>
+                            </SummaryBox>
+                            <Subtitle>
+                                Steps
                             </Subtitle>
                             <ul>
-                                <li>
-                                    vegan
-                                </li>
+                                {recipe?.steps?.map(step => {
+                                    return <li key={step.number}> {step.number} {step.step}</li>
+                                })}
                             </ul>
-                        </DietsBox>
-
-                    </Side>
-                    <Side>
-                        <SummaryBox>
-                            <Subtitle>
-                                Summary:
-                            </Subtitle>
-                            <Parraf>
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum vitae libero est consequatur corrupti atque eligendi minima quaerat facere obcaecati inventore eveniet provident praesentium amet distinctio, sapiente saepe quod at!
-                            </Parraf>
-                        </SummaryBox>
-                        <Subtitle>
-                            Steps
-                        </Subtitle>
-                    </Side>
-
-                </Section>
-
-
-            </Container>
-        </Body>
+                        </Side>
+                    </Section>
+                </Container>
+            </Body>
 
     );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import noImg from "../../images/noImg.png";
 import { letter, bars, secundary, bg } from "../../theme/colors";
@@ -123,9 +123,36 @@ const Image = styled.img`
     max-height:169px;
     border-radius: 10px;
 `;
-const Form = () => {
-    return (
 
+export const validate = (input) => {
+    let errors = {};
+    if (!input.title) {
+        errors.title = 'Title is required';
+    } else if (input.title.trim() < 0) {
+        errors.title = 'Title is invalid';
+    }
+    return errors;
+}
+const Form = () => {
+    const [newRecipe, setNewRecipe] = useState({
+        title: '',
+        summary: '',
+    });
+
+    const [input, setInput] = useState({ title: '' });
+    const [errors, setErrors] = useState({});
+
+    const handleChanged = (e) => {
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value,
+        })
+        setErrors(validate({
+            ...input,
+            [e.target.name]: e.target.value,
+        }))
+    }
+    return (
         <Body>
             <FormR>
                 <Title>New Ricipe</Title>
@@ -149,31 +176,41 @@ const Form = () => {
                                 </li>
                             </ul>
                             <GrpRow>
-                                <Input placeholder="Next step" />
+                                <Input type='text' name='step' placeholder="Next step" />
                                 <Button>Add</Button>
                             </GrpRow>
                         </Group>
                     </Section>
                     <Section>
                         <Group>
-                            <Input placeholder="Title" />
+                            <Input
+                                className={errors.title && 'danger'}
+                                type='text'
+                                name='title'
+                                placeholder='Title'
+                                onChange={handleChanged}
+                                value={input.title}
+                            />
+                            {errors.title && (
+                                <p className='danger'>{errors.title}</p>
+                            )}
                         </Group>
                         <GrpRow>
                             <GrpRow>
                                 <Label>
                                     Health:
                                 </Label>
-                                <Input type='number' step="10" min="0" max="100" />
+                                <Input type='number' name='health' step="10" min="0" max="100" />
                             </GrpRow>
                             <GrpRow>
                                 <Label>
                                     Score:
                                 </Label>
-                                <Input type='number' step="10" min="0" max="100" />
+                                <Input type='number' name='score' step="10" min="0" max="100" />
                             </GrpRow>
                         </GrpRow>
                         <Group>
-                            <Select multiple={false} value={['B', 'C']}>
+                            <Select multiple={false} name='diets' value={['B', 'C']}>
                                 <option value="Diets">Grapefruit</option>
                             </Select>
                             <div>
@@ -184,14 +221,14 @@ const Form = () => {
                             <Label>
                                 Summary:
                             </Label>
-                            <TextArea maxLength={1000} placeholder='write' rows={10} cols={50} />
+                            <TextArea type='text' name='summary' maxLength={1000} placeholder='write' rows={10} cols={50} />
                         </Group>
 
                     </Section>
 
                 </Container>
                 <ButtonsBox>
-                    <Button>Agregar</Button>
+                    <Button type='submit' name='add' >Agregar</Button>
                     <Button>Cancelar</Button>
                 </ButtonsBox>
 

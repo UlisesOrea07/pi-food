@@ -18,7 +18,7 @@
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js');
-const { conn, Type } = require('./src/db.js');
+const { conn, Diet } = require('./src/db.js');
 
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {
@@ -28,7 +28,7 @@ conn.sync({ force: true }).then(() => {
     //Precargar Diets Types a la tabla.
     const diets = ['gluten free', 'dairy free', 'lacto ovo vegetarian', 'vegan', 'paleolithic', 'primal', 'pescatarian', 'whole 30']
     diets?.map(async diet => {
-      await Type.create({
+      await Diet.create({
         name: diet
       });
     })

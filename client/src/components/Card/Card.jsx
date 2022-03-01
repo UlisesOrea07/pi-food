@@ -62,7 +62,7 @@ const LINK = styled.a`
 const Card = ({ id, health, score, image, title, diets }) => {
     return (
         <CardContainer>
-            <LINK href={`/detail/${id}`}>
+            <LINK href={`/details/${id}`}>
                 <ImagenBox>
                     <Image src={image} alt='image no found' />
 
