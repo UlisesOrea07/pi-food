@@ -97,8 +97,33 @@ export const getRecipeDetail = (id) => {
 //         });
 //     }
 // };
-export const orderAZ = (array, prop) => {
 
+export const orderByDiets = (array, prop, diet) => {
+    return dispatch => {
+        try {
+            dispatch({
+                type: LOAD,
+            })
+
+            array.map(obj => {
+                return obj[prop]?.filter(d => diet === d)
+            })
+            let newArray = [...array]
+            dispatch({
+                type: SUCCESS,
+                payload: newArray
+            })
+
+        } catch (error) {
+            dispatch({
+                type: ERROR,
+                payload: error
+            })
+        }
+    }
+
+}
+export const orderAZ = (array, prop) => {
     array.sort((a, b) => a[prop] - b[prop]);
     // return newArray;
     return dispatch => {

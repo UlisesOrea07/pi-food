@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { letter, bg } from "../theme/colors";
 const Container = styled.div`

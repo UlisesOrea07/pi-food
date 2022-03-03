@@ -107,7 +107,8 @@ router.get('/recipes/:id', async (req, res) => {
                     through: {
                         attributes: []
                     }
-                }]
+                }
+            ]
         });
         return recipePg ? res.json(recipePg) : res.status(404).send('Not found');
     } catch (error) {

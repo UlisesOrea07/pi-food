@@ -23,6 +23,12 @@ const orderScoreDesc = (array, prop) => {
     array.reverse((a, b) => a[prop] - b[prop])
     return array;
 }
+
+const orderByDiets = (array, prop, diet) => {
+    return array.map(obj => {
+        return obj[prop]?.filter(d => diet === d)
+    })
+}
 export {
     orderAlphaAsc,
     orderAlphaDesc,

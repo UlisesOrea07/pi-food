@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getRecipes, orderAZ, update } from "../../actions";
+import { getRecipes, orderAZ, orderByDiets, update } from "../../actions";
 import { useDispatch } from "react-redux";
 import { orderAlphaAsc, orderAlphaDesc, orderScoreAsc, orderScoreDesc } from "../../utils/order";
 import { letter, bars, secundary, bg } from "../../theme/colors";
@@ -118,7 +118,9 @@ const SearchBar = ({ recipes }) => {
             setOnScore(!onScore)
             setArrow('%E2%86%91 %E2%86%93')
         }
-
+    }
+    const handleDiets = () => {
+        dispatch(orderByDiets(recipes, 'diets', 'pescatarian'))
     }
 
 
@@ -152,6 +154,9 @@ const SearchBar = ({ recipes }) => {
                     Score <Changed>{decodeURI(arrow)} </Changed>
                 </ButtonOrder>
 
+                <ButtonOrder onClick={() => handleDiets()}>
+                    Diets
+                </ButtonOrder>
             </Div>
 
         </Container>

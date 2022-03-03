@@ -72,6 +72,15 @@ const Input = styled.input`
     outline: none;
     width:100%;
 `;
+const InputNumber = styled.input.attrs({
+    type: 'number',
+    name: 'score',
+    step: '10',
+    min: "0",
+    max: '100'
+})`
+    
+`;
 const ButtonsBox = styled.div`
     display: flex;
     justify-content: space-evenly;
@@ -126,21 +135,28 @@ const Image = styled.img`
 
 export const validate = (input) => {
     let errors = {};
-    if (!input.title) {
-        errors.title = 'Title is required';
-    } else if (input.title.trim() < 0) {
-        errors.title = 'Title is invalid';
+    if (!input.name) {
+        errors.name = 'it is required';
+    } else if (input.name.trim() < 0) {
+        errors.name = 'it is invalid';
     }
     return errors;
 }
 const Form = () => {
-    const [newRecipe, setNewRecipe] = useState({
-        title: '',
-        summary: '',
-    });
 
     const [input, setInput] = useState({ title: '' });
     const [errors, setErrors] = useState({});
+
+
+
+    const [newRecipe, setNewRecipe] = useState({
+        title: '',
+        summary: '',
+        spoonacularScore: 0,
+        healthScore: 0,
+        steps: [],
+        diets: []
+    });
 
     const handleChanged = (e) => {
         setInput({
@@ -152,9 +168,10 @@ const Form = () => {
             [e.target.name]: e.target.value,
         }))
     }
+    const handleSubmit = () => { };
     return (
         <Body>
-            <FormR>
+            <FormR onSubmit={handleSubmit}>
                 <Title>New Ricipe</Title>
                 <Hr />
                 <Container>
@@ -163,8 +180,7 @@ const Form = () => {
                             <ImagenBox>
                                 <Image src={noImg} />
                             </ImagenBox>
-                            <input type="file" accept="image/png, .jpeg, .jpg, image/gif" />
-                            {/* <UploadImage /> */}
+                            <Input type="text" name="image" placeholder="Insert URL" />
                         </Group>
                         <Group>
                             <Label>
@@ -200,13 +216,32 @@ const Form = () => {
                                 <Label>
                                     Health:
                                 </Label>
-                                <Input type='number' name='health' step="10" min="0" max="100" />
+                                <InputNumber
+                                    type='number'
+                                    name='healthScore'
+                                    step="10"
+                                    min="0"
+                                    max="100"
+                                    onChange={input.healthScore}
+                                />
+                                {errors.title && (
+                                    <p className='danger'>{errors.title}</p>
+                                )}
                             </GrpRow>
                             <GrpRow>
                                 <Label>
                                     Score:
                                 </Label>
-                                <Input type='number' name='score' step="10" min="0" max="100" />
+                                <InputNumber
+                                    type='number'
+                                    name='spoonacularScore'
+                                    min="0"
+                                    max="100"
+                                    onChange={input.spoonacularScore}
+                                />
+                                {errors.title && (
+                                    <p className='danger'>{errors.title}</p>
+                                )}
                             </GrpRow>
                         </GrpRow>
                         <Group>
@@ -221,7 +256,19 @@ const Form = () => {
                             <Label>
                                 Summary:
                             </Label>
-                            <TextArea type='text' name='summary' maxLength={1000} placeholder='write' rows={10} cols={50} />
+                            <TextArea
+                                type='text'
+                                name='summary'
+                                maxLength={1000}
+                                placeholder='write'
+                                rows={10}
+                                cols={50}
+                                onChange={handleChanged}
+                                value={input.summary}
+                            />
+                            {errors.title && (
+                                <p className='danger'>{errors.title}</p>
+                            )}
                         </Group>
 
                     </Section>
