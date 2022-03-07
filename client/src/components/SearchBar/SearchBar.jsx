@@ -119,9 +119,7 @@ const SearchBar = ({ recipes }) => {
             setArrow('%E2%86%91 %E2%86%93')
         }
     }
-    const handleDiets = () => {
-        dispatch(orderByDiets(recipes, 'diets', 'pescatarian'))
-    }
+
 
 
     const handleChange = (event) => {
@@ -154,9 +152,7 @@ const SearchBar = ({ recipes }) => {
                     Score <Changed>{decodeURI(arrow)} </Changed>
                 </ButtonOrder>
 
-                <ButtonOrder onClick={() => handleDiets()}>
-                    Diets
-                </ButtonOrder>
+
             </Div>
 
         </Container>

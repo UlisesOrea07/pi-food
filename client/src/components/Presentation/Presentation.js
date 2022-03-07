@@ -27,6 +27,7 @@ const Div = styled.div`
 const ImgBox = styled.div`
     margin: 0;
     align-items: center;
+    border-radius:10px;
 `;
 const P = styled.p`
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -35,7 +36,7 @@ const P = styled.p`
 const Presentation = () => {
     return (
         <Container>
-            <Title>Algo que decir</Title>
+            <Title>App recipes</Title>
             <Div>
                 <ImgBox>
                     <img src={presentation} width="50%" />

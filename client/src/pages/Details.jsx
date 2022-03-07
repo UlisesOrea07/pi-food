@@ -73,7 +73,8 @@ const Details = () => {
         dispatch(getRecipeDetail(id))
     }, [dispatch])
 
-    console.log(recipe?.steps)
+    console.log(recipe.steps + 'pasosos')
+    console.log('Dietaaa' + recipe.diets)
 
     return (
         loading ? <Loading /> :
@@ -98,11 +99,11 @@ const Details = () => {
                                 <Subtitle>
                                     Diets:
                                 </Subtitle>
-                                <ul>
+                                {/* <ul>
                                     {recipe.diets?.map(diet => {
                                         return <li key={diet}> {diet}</li>
                                     })}
-                                </ul>
+                                </ul> */}
                             </DietsBox>
 
                         </Side>
@@ -119,8 +120,8 @@ const Details = () => {
                                 Steps
                             </Subtitle>
                             <ul>
-                                {recipe?.steps?.map(step => {
-                                    return <li key={step.number}> {step.number} {step.step}</li>
+                                {recipe.steps?.map((step, i) => {
+                                    return <li key={i}> {step}</li>
                                 })}
                             </ul>
                         </Side>

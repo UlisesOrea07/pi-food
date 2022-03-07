@@ -1,6 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { bars } from "../../theme/colors";
+
+const Body = styled.div`
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 const Container = styled.div`
     border: 10px solid rgba(0,0,0,.1);
     width: 100px;
@@ -19,8 +29,11 @@ const Container = styled.div`
 `;
 const Loading = () => {
     return (
-        <Container>
-        </Container>
+        <Body>
+            <Container>
+            </Container>
+        </Body>
+
 
     );
 }

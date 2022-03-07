@@ -26,7 +26,7 @@ conn.sync({ force: true }).then(() => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
 
     //Precargar Diets Types a la tabla.
-    const diets = ['gluten free', 'dairy free', 'lacto ovo vegetarian', 'vegan', 'paleolithic', 'primal', 'pescatarian', 'whole 30']
+    const diets = ['gluten free', 'dairy free', 'lacto ovo vegetarian', 'vegan', 'paleolithic', 'primal', 'pescatarian']
     diets?.map(async diet => {
       await Diet.create({
         name: diet

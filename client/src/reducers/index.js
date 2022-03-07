@@ -1,7 +1,9 @@
-import { SUCCESS, LOAD, ERROR } from '../actions/index'
+import { SUCCESS, POST_SUCCESS, DIETS_SUCCES, LOAD, ERROR } from '../actions/index'
 const initialState = {
     recipesLoaded: [],
     recipeDetail: {},
+    recipeAdded: {},
+    dietsLoaded: [],
     busy: false,
     error: null
 };
@@ -14,11 +16,6 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 recipeDetail: action.payload
             }
-        // case 'POST_RECIPE':
-        //     return {
-        //         ...state,
-
-        //     }
 
         case 'ORDERAZ':
             return {
@@ -34,7 +31,7 @@ const rootReducer = (state = initialState, action) => {
         case LOAD:
             return {
                 ...state,
-                recipesLoaded: [],
+                // recipesLoaded: [],
                 busy: true,
                 error: null
             }
@@ -42,6 +39,20 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 recipesLoaded: action.payload,
+                busy: false,
+                error: null
+            }
+        case POST_SUCCESS:
+            return {
+                ...state,
+                recipeAdded: action.payload,
+                busy: false,
+                error: null
+            }
+        case DIETS_SUCCES:
+            return {
+                ...state,
+                dietsLoaded: action.payload,
                 busy: false,
                 error: null
             }

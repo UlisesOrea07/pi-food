@@ -1,8 +1,6 @@
-// const GET_RECIPES = 'GET_RECIPES';
 export const GET_RECIPE_DETAIL = 'GET_RECIPE_DETAIL';
-// const POST_RECIPE = 'POST_RECIPE';
-// const INIT = 'INIT';
-// const UPDATE = 'UPDATE';
+export const DIETS_SUCCES = 'DIETS_SUCCES';
+export const POST_SUCCESS = 'POST_SUCCESS';
 const ERROR_RECIPE = 'ERROR_RECIPES';
 export const SUCCESS = 'SUCCESS';
 export const LOAD = 'LOAD';
@@ -55,7 +53,29 @@ export const getAllRecipes = () => {
             });
         }
     }
+};
 
+export const getAllDiets = () => {
+    return dispatch => {
+        try {
+            dispatch(
+                { type: LOAD }
+            )
+            return fetch(BASEURL + '/diets')
+                .then(response => response.json())
+                .then(jso => {
+                    dispatch({
+                        type: DIETS_SUCCES,
+                        payload: jso
+                    })
+                })
+        } catch (error) {
+            dispatch({
+                type: ERROR,
+                payload: error
+            })
+        }
+    }
 };
 
 export const getRecipeDetail = (id) => {
@@ -78,25 +98,36 @@ export const getRecipeDetail = (id) => {
         }
     }
 };
-// export const postRecipe = (recipe) => {
-//     try {
-//         return dispatch => {
-//             return fetch(`${BASEURL}/recipe`)
-//                 .then(response => response.json())
-//                 .then(jso => {
-//                     dispatch({
-//                         type: POST_RECIPE,
-//                         payload: jso
-//                     })
-//                 })
-//         }
-//     } catch (error) {
-//         dispatch({
-//             type: ERROR_RECIPE,
-//             payload: error,
-//         });
-//     }
-// };
+export const postRecipe = (recipe) => {
+    return dispatch => {
+        try {
+            dispatch({
+                type: LOAD
+            })
+            const requesOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(recipe)
+            }
+            return fetch(`${BASEURL}/recipe`, requesOptions)
+
+                .then(response => response.json())
+                .then(jso => {
+                    dispatch({
+                        type: POST_SUCCESS,
+                        payload: jso
+                    })
+                })
+        } catch (error) {
+            console.log(error + 'eorrroorororor')
+            dispatch({
+                type: ERROR,
+                payload: error,
+            });
+        }
+    }
+
+};
 
 export const orderByDiets = (array, prop, diet) => {
     return dispatch => {
@@ -161,3 +192,4 @@ export const update = (array) => {
         }
     }
 };
+

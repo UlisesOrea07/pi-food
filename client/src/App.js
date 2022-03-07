@@ -21,11 +21,7 @@ function App() {
   //   dispatch(getAllRecipes())
   //   setStatus(true)
   // }, [dispatch])
-  useEffect(() => {
-    dispatch(getAllRecipes())
-  }, [dispatch])
 
-  const recipes = useSelector(state => state.recipesLoaded)
   return (
     <>
       <NavBar />
@@ -35,7 +31,7 @@ function App() {
           element={<Principal />} />
         <Route
           path='/home'
-          element={<Home recipes={recipes} />} />
+          element={<Home />} />
         <Route
           path='/details/:id'
           element={<Details />} />

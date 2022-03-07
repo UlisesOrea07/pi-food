@@ -19,11 +19,15 @@ const DivPagination = styled.div`
     flex-direction: row;
     justify-content: center;
 `;
-const Home = ({ recipes }) => {
-    // const dispatch = useDispatch();
+const Home = () => {
+    const dispatch = useDispatch();
     const loading = useSelector(state => state.busy);
     const error = useSelector(state => state.error);
-    // const recipes = useSelector(state => state.recipesLoaded);
+    const recipes = useSelector(state => state.recipesLoaded);
+    useEffect(() => {
+        dispatch(getAllRecipes())
+    }, [dispatch])
+
     //pagination
     //const [state, setState] = useState({ currentPage: null, totalPages: null })
     const [currentRecipes, setCurrentRecipes] = useState([]);

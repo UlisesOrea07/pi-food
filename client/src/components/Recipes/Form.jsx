@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllDiets } from '../../actions/index';
 import styled from "styled-components";
+import { postRecipe } from "../../actions";
 import noImg from "../../images/noImg.png";
 import { letter, bars, secundary, bg } from "../../theme/colors";
-// import UploadImage from "../UploadImage/UploadImage";
+import { useNavigate } from "react-router-dom";
 
 const Body = styled.div`
     position: relative;
@@ -14,7 +17,7 @@ const Container = styled.div`
     position: relative;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: center;    
 `;
 const Title = styled.h1`
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -32,22 +35,21 @@ const FormR = styled.form`
     position: relative;
     color: ${letter};    
     background-color: ${bg};
+    width:80%;
 `;
 const Section = styled.section`
-    margin: 20px;
+    margin: 0 15px 15px 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 50%;
-    height: auto;
 `;
 const Group = styled.div`
     display: flex;
     flex-direction: column;
     margin: 10px;
     justify-content: space-around;
-    width: 100%;
-    height: auto;
+    width: 90%;
 `;
 const GrpRow = styled.div`
     display: flex;
@@ -55,6 +57,7 @@ const GrpRow = styled.div`
     justify-content: space-between;
     margin: 0;
     padding: 0;
+    width: 100%;
 `;
 
 const Label = styled.label`
@@ -74,10 +77,8 @@ const Input = styled.input`
 `;
 const InputNumber = styled.input.attrs({
     type: 'number',
-    name: 'score',
-    step: '10',
-    min: "0",
-    max: '100'
+    min: 0,
+    max: 100
 })`
     
 `;
@@ -97,14 +98,7 @@ const Button = styled.button`
     color: ${bg};
     width: 20%;
 `;
-const Select = styled.select`
-    padding: 4px 8px 4px 8px;
-    background-color: ${secundary};      
-    border: none;
-    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.345);
-    color: ${bg};
-    width: 30%;
-`;
+
 const TextArea = styled.textarea`    
     resize: none;
     border: 0;
@@ -123,52 +117,255 @@ const Hr = styled.hr`
     width: 80%;
 `;
 const ImagenBox = styled.div`
-    width: 100%;  
-    height: 50%;
+    display: flex;  
+    width: 90%;  
+    height: 40%;
     margin: 0 0 10px 0;
+    align-items: center;
+    justify-content: center;
 `;
 const Image = styled.img`
-    width: inherit;   
-    max-height:169px;
+    width: 80%;   
+    max-height: 120px;
     border-radius: 10px;
 `;
+const Box = styled.div`
+    height: 100px;
+    width: 400px;
+    border: 1px solid #ddd;
+    background: ${bg};
+    overflow-y: scroll;
+`;
+const BoxMessage = styled.div`
+    height: auto;
+`;
+const BoxText = styled.div`
+    padding: 4px;
+    background:${bg};
+`;
 
-export const validate = (input) => {
-    let errors = {};
-    if (!input.name) {
-        errors.name = 'it is required';
-    } else if (input.name.trim() < 0) {
-        errors.name = 'it is invalid';
-    }
-    return errors;
-}
+const TyniButton = styled.button`
+    width: 3%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    height: auto;
+    padding: 0;
+    margin: 2px;
+    background-color: transparent;    
+    border: none;   
+    color: ${bars};
+`;
+const ButtonIn = styled.div`
+    width: 90%;
+    position: relative;
+`;
+const BtnX = styled.button`
+    position: absolute;
+    top: 0;
+    border-radius: 1px;
+    right: 0px;
+    z-index: 2;
+    border: none;
+    height: 25px;
+    cursor: pointer;
+    color: ${bg};
+    margin:0;
+    background-color: ${secundary};
+    transform: translateX(2px);
+`;
+
+const InputGroup = styled.input`
+    margin: 0px;
+    width: 95%;
+    outline: none;
+    height: 20px;
+    border-radius: 2px;
+    border: 0;   
+    padding: 2px 0 2px 10px;
+    background-color: rgba(255, 255, 255, 0.924) ;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.100); 
+    font-size: 13px;
+`;
+
+const CheckContent = styled.div`
+    position: relative;
+    display: flex;    
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30%;
+    height: 50px;
+`;
+const Check = styled.input.attrs({
+    type: 'checkbox'
+})``;
+
+const Warning = styled.span`
+    color: red;
+    font-family: monospace;
+`;
 const Form = () => {
+    const dietsLoaded = useSelector(state => state.dietsLoaded)
+    const dispatch = useDispatch();
+    const [img, setImg] = useState(noImg)
+    const navigate = useNavigate();
 
-    const [input, setInput] = useState({ title: '' });
-    const [errors, setErrors] = useState({});
-
+    useEffect(() => {
+        dispatch(getAllDiets())
+    }, [dispatch])
 
 
     const [newRecipe, setNewRecipe] = useState({
         title: '',
         summary: '',
-        spoonacularScore: 0,
-        healthScore: 0,
+        spoonacularScore: '',
+        healthScore: '',
+        image: '',
         steps: [],
         diets: []
     });
+    const [validations, setValidations] = useState({
+        title: '',
+        summary: '',
+        spoonacularScore: '',
+        healthScore: '',
+        image: '',
+        steps: '',
+        diets: ''
+    });
 
-    const handleChanged = (e) => {
-        setInput({
-            ...input,
-            [e.target.name]: e.target.value,
-        })
-        setErrors(validate({
-            ...input,
-            [e.target.name]: e.target.value,
-        }))
+
+    const quitImg = (e) => {
+        setImg(noImg);
+        setNewRecipe({ image: '' })
     }
-    const handleSubmit = () => { };
+
+    const [step, setStep] = useState('');
+
+
+    const newStep = (e) => {
+        e.preventDefault();
+        setNewRecipe({ ...newRecipe, steps: [...steps, step] })
+    };
+
+
+    const validateValues = () => {
+        const { title, summary, spoonacularScore, healthScore, image, steps, diets } = newRecipe;
+        const validations = { title: '', summary: '', spoonacularScore: '', healthScore: '', image: '', steps: '', diets: '' }
+        let isValid = true;
+        if (!title) {
+            validations.title = 'Title is required';
+            isValid = false;
+        }
+        if (title.trim() < 1) {
+            validations.title = 'Title is required';
+            isValid = false;
+        }
+        if (title && title.length < 1 || title.length > 30) {
+            validations.title = 'Title must contain between 1 and 30 characters';
+            isValid = false;
+        }
+        if (!summary) {
+            validations.summary = 'Summary is required';
+            isValid = false;
+        }
+        if (summary && summary.length < 1 || summary.length > 500) {
+            validations.summary = ' Summary must contain between 1 and 500 characters';
+            isValid = false;
+        }
+        if (!spoonacularScore) {
+            validations.spoonacularScore = 'Score is required'
+            isValid = false;
+        }
+        if (!healthScore) {
+            validations.healthScore = 'Healt is required';
+            isValid = false;
+        }
+        if (!image) {
+            validations.image = 'Image is required';
+            isValid = false;
+        }
+        if (image.trim() < 1) {
+            validations.image = 'Image is required';
+            isValid = false;
+        }
+        if (image && image.length < 1 || image.length > 30) {
+            validations.image = 'Image must contain between 1 and 30 characters';
+            isValid = false;
+        }
+        if (steps.length < 1) {
+            validations.steps = 'Steps must contain 1 step';
+            isValid = false;
+        }
+        if (diets.length < 1) {
+            validations.diets = 'You must choose at least one diet';
+            isValid = false;
+        }
+
+
+        if (!isValid) {
+            setValidations(validations);
+        }
+        return isValid;
+    }
+
+    const validatePerValue = (e) => {
+        const { name } = e.target;
+        const value = newRecipe[name];
+        let message = '';
+
+        if (!value) {
+            message = `${name} is required`;
+        }
+
+        if (value && name === 'title' && (value.length < 1 || value.length > 50)) {
+            message = 'Title must contain between 1 and 50 characters';
+        }
+        setValidations({ ...validations, [name]: message })
+    }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setNewRecipe({ ...newRecipe, [name]: value })
+    }
+    const [checkbox, setCheckbox] = useState({})
+    const onCheck = (e) => {
+        const { value } = e.target;
+        // if (e.target.checked) {
+        //     setCheckbox({ ...checkbox, [value]: value })
+        // } else {
+        //     setCheckbox(delete checkbox[value])
+        // }
+        // console.log(checkbox + 'lol')
+        setNewRecipe({ ...newRecipe, diets: [...diets, value] })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const isValid = validateValues();
+        if (!isValid) {
+            return false;
+        }
+        dispatch(postRecipe(newRecipe));
+        navigate('/home');
+        // alert(JSON.stringify(newRecipe));
+    }
+
+    const { title, summary, spoonacularScore, healthScore, image, diets, steps } = newRecipe;
+
+    const {
+        title: titleM,
+        summary: summaryM,
+        spoonacularScore: spoonacularScoreM,
+        healthScore: healthScoreM,
+        image: imageM,
+        diets: dietsM,
+        steps: stepsM
+    } = validations;
+
+
+
+
     return (
         <Body>
             <FormR onSubmit={handleSubmit}>
@@ -178,79 +375,116 @@ const Form = () => {
                     <Section>
                         <Group>
                             <ImagenBox>
-                                <Image src={noImg} />
+                                <Image src={img} />
                             </ImagenBox>
-                            <Input type="text" name="image" placeholder="Insert URL" />
+                            <GrpRow>
+                                <ButtonIn >
+                                    <InputGroup
+                                        type="text"
+                                        placeholder="Insert URL"
+                                        onBlur={validatePerValue}
+                                        name="image"
+                                        value={image}
+                                        onChange={handleChange}
+                                        onBlur={validatePerValue}
+                                    />
+                                    <BtnX onClick={quitImg}>X</BtnX>
+                                </ButtonIn>
+                            </GrpRow>
+                            <Warning>{imageM}</Warning>
                         </Group>
                         <Group>
                             <Label>
                                 STEPS:
                             </Label>
-                            <ul>
-                                <li>
-                                    1. HAcer cuaticomate
-                                </li>
-                            </ul>
+                            <Group>
+                                <Box>
+                                    <BoxText>
+                                        {newRecipe.steps?.map((st, i) => {
+                                            return (
+                                                <BoxMessage key={i}>
+                                                    <TyniButton>
+                                                        X
+                                                    </TyniButton>
+                                                    {i + 1}.-{st}
+                                                </BoxMessage>
+                                            )
+                                        })}
+                                    </BoxText>
+                                </Box>
+                                <Warning>{stepsM}</Warning>
+                            </Group>
                             <GrpRow>
-                                <Input type='text' name='step' placeholder="Next step" />
-                                <Button>Add</Button>
+                                <ButtonIn>
+                                    <InputGroup
+                                        type='text'
+                                        name='step'
+                                        valu={step}
+                                        placeholder="Next step"
+                                        onChange={e => setStep(e.target.value)}
+                                    />
+                                    <BtnX onClick={newStep}>+</BtnX>
+                                </ButtonIn>
                             </GrpRow>
                         </Group>
                     </Section>
                     <Section>
                         <Group>
                             <Input
-                                className={errors.title && 'danger'}
                                 type='text'
                                 name='title'
                                 placeholder='Title'
-                                onChange={handleChanged}
-                                value={input.title}
+                                value={title}
+                                onChange={handleChange}
+                                onBlur={validatePerValue}
                             />
-                            {errors.title && (
-                                <p className='danger'>{errors.title}</p>
-                            )}
+                            <Warning>{titleM}</Warning>
                         </Group>
                         <GrpRow>
-                            <GrpRow>
-                                <Label>
-                                    Health:
-                                </Label>
-                                <InputNumber
-                                    type='number'
-                                    name='healthScore'
-                                    step="10"
-                                    min="0"
-                                    max="100"
-                                    onChange={input.healthScore}
-                                />
-                                {errors.title && (
-                                    <p className='danger'>{errors.title}</p>
-                                )}
-                            </GrpRow>
-                            <GrpRow>
-                                <Label>
-                                    Score:
-                                </Label>
-                                <InputNumber
-                                    type='number'
-                                    name='spoonacularScore'
-                                    min="0"
-                                    max="100"
-                                    onChange={input.spoonacularScore}
-                                />
-                                {errors.title && (
-                                    <p className='danger'>{errors.title}</p>
-                                )}
-                            </GrpRow>
+                            <Group>
+                                <GrpRow>
+                                    <Label>
+                                        Health:
+                                        <InputNumber
+                                            name='healthScore'
+                                            value={healthScore}
+                                            onChange={handleChange}
+                                            onBlur={validatePerValue}
+                                        />
+                                        <small>(1-100)</small>
+                                    </Label>
+                                </GrpRow>
+                                <Warning>{healthScoreM}</Warning>
+                            </Group>
+
+                            <Group>
+                                <GrpRow>
+                                    <Label>
+                                        Score:
+                                        <InputNumber
+                                            name='spoonacularScore'
+                                            value={spoonacularScore}
+                                            onChange={handleChange}
+                                            onBlur={validatePerValue}
+                                        />
+                                        <small>(1-100)</small>
+                                    </Label>
+                                </GrpRow>
+                                <Warning>{spoonacularScoreM}</Warning>
+                            </Group>
+
                         </GrpRow>
                         <Group>
-                            <Select multiple={false} name='diets' value={['B', 'C']}>
-                                <option value="Diets">Grapefruit</option>
-                            </Select>
-                            <div>
-
-                            </div>
+                            <CheckContent>
+                                {
+                                    dietsLoaded?.map((diet) => {
+                                        return (
+                                            <label key={diet.id} ><Check onClick={onCheck} name={diet.name} value={diet.id} />{diet.name}</label>
+                                        )
+                                    })
+                                }
+                            </CheckContent>
+                            <Warning>{dietsM}</Warning>
                         </Group>
                         <Group>
                             <Label>
@@ -259,28 +493,24 @@ const Form = () => {
                             <TextArea
                                 type='text'
                                 name='summary'
-                                maxLength={1000}
+                                maxLength={500}
                                 placeholder='write'
                                 rows={10}
                                 cols={50}
-                                onChange={handleChanged}
-                                value={input.summary}
+                                onChange={handleChange}
+                                onBlur={validatePerValue}
+                                value={summary}
                             />
-                            {errors.title && (
-                                <p className='danger'>{errors.title}</p>
-                            )}
+                            <Warning>{summaryM}</Warning>
                         </Group>
-
                     </Section>
-
                 </Container>
                 <ButtonsBox>
-                    <Button type='submit' name='add' >Agregar</Button>
-                    <Button>Cancelar</Button>
+                    <Button type='submit' name='add'>ADD</Button>
+                    <Button type='reset'>CANCEL</Button>
                 </ButtonsBox>
-
             </FormR>
-        </Body>
+        </Body >
     )
 }
 

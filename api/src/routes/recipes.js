@@ -22,10 +22,12 @@ router.get('/recipes', async (req, res) => {
             let resp = await fetch(`${URL}complexSearch?apiKey=${keyOn.key}&addRecipeInformation=true&number=200`)
             var datApi = await resp.json();
         } else {
-            return res.send(keyOn.message);
+            dataApi = [];
+            //return res.send(keyOn.message);
         }
     } catch (eror) {
-        res.send('Connection error')
+        dataApi = [];
+        //res.send('Connection error')
     }
     try {
         const { name } = req.query;
@@ -90,7 +92,7 @@ router.get('/recipes/:id', async (req, res) => {
                 healthScore: dataApi.healthScore,
                 image: dataApi.image,
                 diets: dataApi.diets,
-                steps: dataApi.analyzedInstructions[0]?.steps
+                steps: dataApi.analyzedInstructions[0]?.steps.map(st => st.step)
                 // steps: dataApi.analyzedInstructions[0] ? dataApi.analyzedInstructions[0].steps : []
             };
             return recipeApi ? res.json(recipeApi) : res.status(404).send('Not found');
@@ -99,7 +101,7 @@ router.get('/recipes/:id', async (req, res) => {
         res.send(error);
     }
     try {
-        const recipePg = await Recipe.findByPk(id, {
+        let recipePg = await Recipe.findByPk(id, {
             include: [
                 {
                     model: Diet,
@@ -110,15 +112,27 @@ router.get('/recipes/:id', async (req, res) => {
                 }
             ]
         });
+
+        recipePg.diets = await recipePg.diets.map(r => r.name);
         return recipePg ? res.json(recipePg) : res.status(404).send('Not found');
     } catch (error) {
         res.send(error);
     }
 });
+router.get('/diets', async function (req, res) {
+    try {
+        let dietsPg = await Diet.findAll();
+        console.log(dietsPg)
+        dietsPg ? res.json(dietsPg) : res.status(404).send('Not found')
+    } catch (error) {
+        res.send(error);
+    }
+
+});
 
 router.post('/recipe', async function (req, res) {
     const { title, summary, spoonacularScore, healthScore, image, steps, diets } = req.body;
-    if (!title, !summary, !spoonacularScore, !healthScore, image, !steps) return res.status(400).send('all field are needed')
+    if (!title, !summary, !spoonacularScore, !healthScore, !image, !steps) return res.status(400).send('all field are needed')
     try {
         const recipe = await Recipe.create({
             title,

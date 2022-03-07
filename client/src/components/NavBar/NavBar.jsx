@@ -6,9 +6,12 @@ const Nav = styled.div`
     background-color: ${bars};
     position: relative;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
+    align-items: center;
+    align-text: center;
+    padding-bottom: 5px;
     
 `;
 const A = styled.a`
@@ -20,6 +23,7 @@ const NavBar = () => {
     return (
         <Nav>
             <PageName><A href='/home' >FOOD, RECIPES AND COOCKING</A></PageName>
+            <A href='/add' >Add new recipe</A>
         </Nav >
     );
 }
