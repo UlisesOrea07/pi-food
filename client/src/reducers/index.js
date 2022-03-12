@@ -1,4 +1,4 @@
-import { SUCCESS, POST_SUCCESS, DIETS_SUCCES, LOAD, ERROR } from '../actions/index'
+import { SUCCESS, POST_SUCCESS, DIETS_SUCCES, LOAD, ERROR, RECIPE_DETAIL_SUCCESS } from '../actions/index'
 const initialState = {
     recipesLoaded: [],
     recipeDetail: {},
@@ -11,10 +11,12 @@ const initialState = {
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
 
-        case 'GET_RECIPE_DETAIL':
+        case RECIPE_DETAIL_SUCCESS:
             return {
                 ...state,
-                recipeDetail: action.payload
+                recipeDetail: action.payload,
+                busy: false,
+                error: null
             }
 
         case 'ORDERAZ':
@@ -60,7 +62,7 @@ const rootReducer = (state = initialState, action) => {
         case ERROR:
             return {
                 ...state,
-                recipesLoaded: [],
+                // recipesLoaded: [],
                 busy: false,
                 error: action.payload
             }

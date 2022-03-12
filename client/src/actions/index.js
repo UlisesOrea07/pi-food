@@ -1,4 +1,4 @@
-export const GET_RECIPE_DETAIL = 'GET_RECIPE_DETAIL';
+export const RECIPE_DETAIL_SUCCESS = 'RECIPE_DETAIL_SUCCESS';
 export const DIETS_SUCCES = 'DIETS_SUCCES';
 export const POST_SUCCESS = 'POST_SUCCESS';
 const ERROR_RECIPE = 'ERROR_RECIPES';
@@ -81,12 +81,14 @@ export const getAllDiets = () => {
 export const getRecipeDetail = (id) => {
     return dispatch => {
         try {
-
+            dispatch(
+                { type: LOAD }
+            )
             return fetch(`${BASEURL}/recipes/${id}`)
                 .then(response => response.json())
                 .then(jso => {
                     dispatch({
-                        type: GET_RECIPE_DETAIL,
+                        type: RECIPE_DETAIL_SUCCESS,
                         payload: jso
                     })
                 });

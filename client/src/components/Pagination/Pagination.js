@@ -5,12 +5,14 @@ import styled from "styled-components";
 const UL = styled.ul`
     list-style-type: none;    
     margin: 0;
-    padding: 0;
+    padding: 0;   
 `;
 const LI = styled.li`
     display: inline;
     margin: 10px;
-    padding: 5px;    
+    padding: 5px;
+    /* border: solid 1px; */
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.100);
 `;
 const A = styled.a`
     outline: none;
@@ -100,6 +102,8 @@ const Pagination = (props) => {
         };
         setState({ currentPage })
         onPageChanged(paginationData);
+        // window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
     }
 
     const handleClick = page => e => {
@@ -139,13 +143,12 @@ const Pagination = (props) => {
                             <A href='!#' onClick={handleMoveRight}>
                                 <span>Next</span>
                                 <span> &raquo;</span>
-
                             </A>
                         </LI>
                     );
 
                     return (
-                        <LI key={index} className={currentPage === page ? 'active' : ''}>
+                        <LI key={index} color={currentPage === page ? 'active' : ''}>
                             <A href='!#' onClick={handleClick(page)}>{page}</A>
                         </LI>
                     );

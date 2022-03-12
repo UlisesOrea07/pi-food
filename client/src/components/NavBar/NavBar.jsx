@@ -1,30 +1,31 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { bars, bg } from "../../theme/colors";
-const Nav = styled.div`
-    background-color: ${bars};
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    align-items: center;
-    align-text: center;
-    padding-bottom: 5px;
-    
-`;
-const A = styled.a`
-    text-decoration: none;
-    color: ${bg};
-`;
-const PageName = styled.h1``;
+import recipeBook from '../../images/recipeBook.png';
+import { P, Container, LogoContainer, Menu, MenuItem, MenuItemLink, Wrapper } from "./NavBar.elements";
+
 const NavBar = () => {
     return (
-        <Nav>
-            <PageName><A href='/home' >FOOD, RECIPES AND COOCKING</A></PageName>
-            <A href='/add' >Add new recipe</A>
-        </Nav >
+        <Container>
+            <Wrapper>
+                <LogoContainer>
+                    <img src={recipeBook} width='8%' />
+                    <P>Food, recipes & coocking</P>
+                </LogoContainer>
+
+                <Menu>
+                    <MenuItem>
+                        <MenuItemLink href="/home" onclick="event.preventDefault()">
+                            Home
+                        </MenuItemLink>
+                    </MenuItem>
+                    <MenuItem>
+                        <MenuItemLink href="/add" onclick="event.preventDefault()">
+                            Add Recipe
+                        </MenuItemLink>
+                    </MenuItem>
+                </Menu>
+            </Wrapper>
+        </Container>
+
     );
 }
 

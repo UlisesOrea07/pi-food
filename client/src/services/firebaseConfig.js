@@ -14,8 +14,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
-const storage = getStorage(firebaseApp);
-// Create a child reference
-export const imagesRef = ref(storage, 'recipesImg');
-// imagesRef now points to 'images'
+export const storage = getStorage(firebaseApp);
+
 

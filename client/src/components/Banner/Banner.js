@@ -53,7 +53,6 @@ const Button = styled.button`
     }
 `;
 const Banner = () => {
-    console.log(bg)
     return (
         <Container>
             <TitleContainer>

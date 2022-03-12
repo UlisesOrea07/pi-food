@@ -15,12 +15,15 @@ const CardContainer = styled.div`
     border-radius: 20px 20px 0 0;
     background-color: ${bg};
 `;
-const ImagenBox = styled.div`
+const ImagenBox = styled.div`    
     width: 100%;  
-    height: auto;
+    height: 300px;
 `;
 const Image = styled.img`
-    width: inherit;    
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    /* width: inherit;   */
     border-radius: 20px 20px 0 0;
 `;
 const InfoBox = styled.div`

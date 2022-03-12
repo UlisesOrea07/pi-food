@@ -4,16 +4,13 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getRecipeDetail } from "../actions";
 import Loading from "../components/Loading/Loading";
-import { letter, bg } from "../theme/colors";
+import { letter, bg, bars, secundary } from "../theme/colors";
 
 const Body = styled.div`
     position: absolute;
     display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
     width: 100%;
-    height: inherit;
+    flex-direction: column;
     background-color: ${bg};
 `;
 const TitleBox = styled.div`
@@ -24,44 +21,83 @@ const TitleBox = styled.div`
     color: ${letter};
 `;
 
-const Subtitle = styled.h3``;
+const Subtitle = styled.h3`
+    position: relative ;
+    margin-top: 10px;
+    padding: 0;
+`;
 
 const Container = styled.div`
     display: flex;
     position: relative;
     flex-direction: column;
-    margin: 0;
     width: 100%;
 `;
-const Section = styled.section`
+const Section = styled.div`
     display: flex;
     flex-direction: row;
     padding: 1%;
     margin: 1%;
 `;
-const Side = styled.div`
+const SideRight = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 0 5% 0 0;
+    margin: 0 2% 0 0;
+`;
+const SideLeft = styled.div`
+    display: flex;
+    padding: 15px;
+    flex-direction: column;
+    color: ${bg};
+    background-color: ${bars};
+    margin: 0 2% 0 0;
 `;
 const ImageBox = styled.div`
-    position: relative;
+    position: sticky;
     margin: 0;
-    width: inherit;
-    height: auto;
+    /* width: 600px; */
+    max-width: 400px;
+    max-height: 400px;
+`;
+const Img = styled.img`
+    /* width: inherit;   */
+    object-fit: fill;
+    width: 400px;
+    height: 400px;
+    border-radius: 20px 20px 0 0;    
 `;
 const InfoBox = styled.div`
+    position: relative;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
 `;
 const DietsBox = styled.div`
     text-align: left;
 `;
 const SummaryBox = styled.div`
-    
+    width: 90%;
+    display: flex;
+    flex-direction: column;
 `;
-const Parraf = styled.p``;
+const StepsBox = styled.div`
+    margin-left: 10%;  
+    padding-bottom: 20px ;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+`;
+const ListItem = styled.li`
+    list-style-type: none;
+`;
+
+const Parraf = styled.p`
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 500;
+`;
 
 const Details = () => {
 
@@ -73,9 +109,6 @@ const Details = () => {
         dispatch(getRecipeDetail(id))
     }, [dispatch])
 
-    console.log(recipe.steps + 'pasosos')
-    console.log('Dietaaa' + recipe.diets)
-
     return (
         loading ? <Loading /> :
             <Body>
@@ -84,9 +117,9 @@ const Details = () => {
                         <h1>{recipe.title}</h1>
                     </TitleBox>
                     <Section>
-                        <Side>
+                        <SideLeft>
                             <ImageBox>
-                                <img src={recipe.image} alt='not found' />
+                                <Img src={recipe.image} alt='not found' />
                             </ImageBox>
                             <Subtitle>
                                 Information
@@ -99,15 +132,15 @@ const Details = () => {
                                 <Subtitle>
                                     Diets:
                                 </Subtitle>
-                                {/* <ul>
+                                <ul>
                                     {recipe.diets?.map(diet => {
-                                        return <li key={diet}> {diet}</li>
+                                        return <ListItem key={diet}> {diet}</ListItem>
                                     })}
-                                </ul> */}
+                                </ul>
                             </DietsBox>
 
-                        </Side>
-                        <Side>
+                        </SideLeft>
+                        <SideRight>
                             <SummaryBox>
                                 <Subtitle>
                                     Summary:
@@ -116,16 +149,19 @@ const Details = () => {
                                     {(recipe.summary)}
                                 </Parraf>
                             </SummaryBox>
-                            <Subtitle>
-                                Steps
-                            </Subtitle>
-                            <ul>
-                                {recipe.steps?.map((step, i) => {
-                                    return <li key={i}> {step}</li>
-                                })}
-                            </ul>
-                        </Side>
+
+                        </SideRight>
                     </Section>
+                    <StepsBox>
+                        <Subtitle>
+                            Steps
+                        </Subtitle>
+                        <ol>
+                            {recipe.steps?.map((step, i) => {
+                                return <li key={i}> {step}</li>
+                            })}
+                        </ol>
+                    </StepsBox>
                 </Container>
             </Body>
 

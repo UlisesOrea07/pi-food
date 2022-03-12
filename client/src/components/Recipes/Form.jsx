@@ -3,15 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllDiets } from '../../actions/index';
 import styled from "styled-components";
 import { postRecipe } from "../../actions";
-import noImg from "../../images/noImg.png";
 import { letter, bars, secundary, bg } from "../../theme/colors";
 import { useNavigate } from "react-router-dom";
+import Uploader from "../Uploader/Uploader";
+import Modal from "../Modal/Modal";
 
 const Body = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    height: 100%;
 `;
 const Container = styled.div`
     position: relative;
@@ -157,7 +160,7 @@ const TyniButton = styled.button`
     color: ${bars};
 `;
 const ButtonIn = styled.div`
-    width: 90%;
+    width: 100%;
     position: relative;
 `;
 const BtnX = styled.button`
@@ -173,6 +176,8 @@ const BtnX = styled.button`
     margin:0;
     background-color: ${secundary};
     transform: translateX(2px);
+    width: 5%;
+    height: 20px;
 `;
 
 const InputGroup = styled.input`
@@ -208,13 +213,13 @@ const Warning = styled.span`
 const Form = () => {
     const dietsLoaded = useSelector(state => state.dietsLoaded)
     const dispatch = useDispatch();
-    const [img, setImg] = useState(noImg)
     const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getAllDiets())
     }, [dispatch])
 
+    const [modalState, setModalState] = useState(false);
 
     const [newRecipe, setNewRecipe] = useState({
         title: '',
@@ -236,17 +241,17 @@ const Form = () => {
     });
 
 
-    const quitImg = (e) => {
-        setImg(noImg);
-        setNewRecipe({ image: '' })
-    }
+    const getUrl = (url) => {
+        // e.target.preventDefault();
+        setNewRecipe({ ...newRecipe, image: url })
+    };
 
     const [step, setStep] = useState('');
-
-
     const newStep = (e) => {
         e.preventDefault();
+        if (step.trim() === '') return null;
         setNewRecipe({ ...newRecipe, steps: [...steps, step] })
+        setStep('');
     };
 
 
@@ -282,16 +287,9 @@ const Form = () => {
             validations.healthScore = 'Healt is required';
             isValid = false;
         }
+
         if (!image) {
             validations.image = 'Image is required';
-            isValid = false;
-        }
-        if (image.trim() < 1) {
-            validations.image = 'Image is required';
-            isValid = false;
-        }
-        if (image && image.length < 1 || image.length > 30) {
-            validations.image = 'Image must contain between 1 and 30 characters';
             isValid = false;
         }
         if (steps.length < 1) {
@@ -367,150 +365,150 @@ const Form = () => {
 
 
     return (
-        <Body>
-            <FormR onSubmit={handleSubmit}>
-                <Title>New Ricipe</Title>
-                <Hr />
-                <Container>
-                    <Section>
-                        <Group>
-                            <ImagenBox>
-                                <Image src={img} />
-                            </ImagenBox>
-                            <GrpRow>
-                                <ButtonIn >
-                                    <InputGroup
-                                        type="text"
-                                        placeholder="Insert URL"
-                                        onBlur={validatePerValue}
-                                        name="image"
-                                        value={image}
-                                        onChange={handleChange}
-                                        onBlur={validatePerValue}
-                                    />
-                                    <BtnX onClick={quitImg}>X</BtnX>
-                                </ButtonIn>
-                            </GrpRow>
-                            <Warning>{imageM}</Warning>
-                        </Group>
-                        <Group>
-                            <Label>
-                                STEPS:
-                            </Label>
+        <>
+            <Modal
+                modalState={modalState}
+                setModalState={setModalState}
+            >
+                <Button>
+                    ok
+                </Button>
+                <Button>
+                    Cancel
+                </Button>
+            </Modal>
+            <Body>
+                <FormR onSubmit={handleSubmit}>
+                    <Title>New Ricipe</Title>
+                    <Hr />
+                    <Container>
+                        <Section>
                             <Group>
-                                <Box>
-                                    <BoxText>
-                                        {newRecipe.steps?.map((st, i) => {
+                                <ImagenBox>
+                                    <Uploader getUrl={getUrl} />
+                                </ImagenBox>
+
+                                <Warning>{imageM}</Warning>
+                            </Group>
+                            <Group>
+                                <Label>
+                                    STEPS:
+                                </Label>
+                                <Group>
+                                    <Box>
+                                        <BoxText>
+                                            {newRecipe.steps?.map((st, i) => {
+                                                return (
+                                                    <BoxMessage key={i}>
+                                                        <TyniButton>
+                                                            X
+                                                        </TyniButton>
+                                                        {i + 1}.-{st}
+                                                    </BoxMessage>
+                                                )
+                                            })}
+                                        </BoxText>
+                                    </Box>
+                                    <Warning>{stepsM}</Warning>
+                                </Group>
+                                <GrpRow>
+                                    <ButtonIn>
+                                        <InputGroup
+                                            type='text'
+                                            name='step'
+                                            value={step}
+                                            placeholder="Next step"
+                                            onChange={e => setStep(e.target.value)}
+                                        />
+                                        <BtnX onClick={newStep}>+</BtnX>
+                                    </ButtonIn>
+                                </GrpRow>
+                            </Group>
+                        </Section>
+                        <Section>
+                            <Group>
+                                <Input
+                                    type='text'
+                                    name='title'
+                                    placeholder='Title'
+                                    value={title}
+                                    onChange={handleChange}
+                                    onBlur={validatePerValue}
+                                />
+                                <Warning>{titleM}</Warning>
+                            </Group>
+                            <GrpRow>
+                                <Group>
+                                    <GrpRow>
+                                        <Label>
+                                            Health:
+                                            <InputNumber
+                                                name='healthScore'
+                                                value={healthScore}
+                                                onChange={handleChange}
+                                                onBlur={validatePerValue}
+                                            />
+                                            <small>(1-100)</small>
+                                        </Label>
+                                    </GrpRow>
+                                    <Warning>{healthScoreM}</Warning>
+                                </Group>
+
+                                <Group>
+                                    <GrpRow>
+                                        <Label>
+                                            Score:
+                                            <InputNumber
+                                                name='spoonacularScore'
+                                                value={spoonacularScore}
+                                                onChange={handleChange}
+                                                onBlur={validatePerValue}
+                                            />
+                                            <small>(1-100)</small>
+                                        </Label>
+                                    </GrpRow>
+                                    <Warning>{spoonacularScoreM}</Warning>
+                                </Group>
+
+                            </GrpRow>
+                            <Group>
+                                <CheckContent>
+                                    {
+                                        dietsLoaded?.map((diet) => {
                                             return (
-                                                <BoxMessage key={i}>
-                                                    <TyniButton>
-                                                        X
-                                                    </TyniButton>
-                                                    {i + 1}.-{st}
-                                                </BoxMessage>
+                                                <label key={diet.id} ><Check onClick={onCheck} name={diet.name} value={diet.id} />{diet.name}</label>
                                             )
-                                        })}
-                                    </BoxText>
-                                </Box>
-                                <Warning>{stepsM}</Warning>
+                                        })
+                                    }
+                                </CheckContent>
+                                <Warning>{dietsM}</Warning>
                             </Group>
-                            <GrpRow>
-                                <ButtonIn>
-                                    <InputGroup
-                                        type='text'
-                                        name='step'
-                                        valu={step}
-                                        placeholder="Next step"
-                                        onChange={e => setStep(e.target.value)}
-                                    />
-                                    <BtnX onClick={newStep}>+</BtnX>
-                                </ButtonIn>
-                            </GrpRow>
-                        </Group>
-                    </Section>
-                    <Section>
-                        <Group>
-                            <Input
-                                type='text'
-                                name='title'
-                                placeholder='Title'
-                                value={title}
-                                onChange={handleChange}
-                                onBlur={validatePerValue}
-                            />
-                            <Warning>{titleM}</Warning>
-                        </Group>
-                        <GrpRow>
                             <Group>
-                                <GrpRow>
-                                    <Label>
-                                        Health:
-                                        <InputNumber
-                                            name='healthScore'
-                                            value={healthScore}
-                                            onChange={handleChange}
-                                            onBlur={validatePerValue}
-                                        />
-                                        <small>(1-100)</small>
-                                    </Label>
-                                </GrpRow>
-                                <Warning>{healthScoreM}</Warning>
+                                <Label>
+                                    Summary:
+                                </Label>
+                                <TextArea
+                                    type='text'
+                                    name='summary'
+                                    maxLength={500}
+                                    placeholder='write'
+                                    rows={10}
+                                    cols={50}
+                                    onChange={handleChange}
+                                    onBlur={validatePerValue}
+                                    value={summary}
+                                />
+                                <Warning>{summaryM}</Warning>
                             </Group>
-
-                            <Group>
-                                <GrpRow>
-                                    <Label>
-                                        Score:
-                                        <InputNumber
-                                            name='spoonacularScore'
-                                            value={spoonacularScore}
-                                            onChange={handleChange}
-                                            onBlur={validatePerValue}
-                                        />
-                                        <small>(1-100)</small>
-                                    </Label>
-                                </GrpRow>
-                                <Warning>{spoonacularScoreM}</Warning>
-                            </Group>
-
-                        </GrpRow>
-                        <Group>
-                            <CheckContent>
-                                {
-                                    dietsLoaded?.map((diet) => {
-                                        return (
-                                            <label key={diet.id} ><Check onClick={onCheck} name={diet.name} value={diet.id} />{diet.name}</label>
-                                        )
-                                    })
-                                }
-                            </CheckContent>
-                            <Warning>{dietsM}</Warning>
-                        </Group>
-                        <Group>
-                            <Label>
-                                Summary:
-                            </Label>
-                            <TextArea
-                                type='text'
-                                name='summary'
-                                maxLength={500}
-                                placeholder='write'
-                                rows={10}
-                                cols={50}
-                                onChange={handleChange}
-                                onBlur={validatePerValue}
-                                value={summary}
-                            />
-                            <Warning>{summaryM}</Warning>
-                        </Group>
-                    </Section>
-                </Container>
-                <ButtonsBox>
-                    <Button type='submit' name='add'>ADD</Button>
-                    <Button type='reset'>CANCEL</Button>
-                </ButtonsBox>
-            </FormR>
-        </Body >
+                        </Section>
+                    </Container>
+                    <ButtonsBox>
+                        <Button type='submit' name='add'>ADD</Button>
+                        <Button type='reset' onClick={() => setModalState(!modalState)}>CANCEL</Button>
+                    </ButtonsBox>
+                </FormR>
+            </Body >
+        </>
     )
 }
 

@@ -45,12 +45,20 @@ router.get('/recipes', async (req, res) => {
                     diets: r.diets
                 };
             })
-            const recipesPg = await Recipe.findAll({
+            let recipesPg = await Recipe.findAll({
                 where: {
                     title: {
-                        [Op.substring]: name
+                        [Op.iLike]: name
                     }
-                }
+                },
+                include: Diet
+
+            });
+            recipesPg = await JSON.parse(JSON.stringify(recipesPg));
+            recipesPg.map(recipe => {
+                recipe.diets = recipe.diets?.map(d => {
+                    return d.name
+                })
             });
             const recipes = [...recipesApi, ...recipesPg]
             return recipes ? res.json(recipes) : res.status(404).send('Not found');
@@ -66,7 +74,24 @@ router.get('/recipes', async (req, res) => {
                     diets: recipe.diets
                 };
             });
-            const recipesPg = await Recipe.findAll();
+            let recipesPg = await Recipe.findAll({
+                include: [
+                    {
+                        model: Diet,
+                        attributes: ['name'],
+                        through: {
+                            attributes: []
+                        }
+                    }
+                ]
+            });
+            recipesPg = await JSON.parse(JSON.stringify(recipesPg));
+            recipesPg.map(recipe => {
+                recipe.diets = recipe.diets?.map(d => {
+                    return d.name
+                })
+            });
+
             const recipes = [...recipesApi, ...recipesPg]
             return recipes ? res.json(recipes) : res.status(404).send('Not found');
         }
@@ -112,8 +137,10 @@ router.get('/recipes/:id', async (req, res) => {
                 }
             ]
         });
-
-        recipePg.diets = await recipePg.diets.map(r => r.name);
+        recipePg = JSON.parse(JSON.stringify(recipePg));
+        recipePg.diets = recipePg.diets?.map(diet => diet.name);
+        // let diets = recipePg.diets.map(r => r.name);
+        // recipePg = { ...recipePg, diets: diets }
         return recipePg ? res.json(recipePg) : res.status(404).send('Not found');
     } catch (error) {
         res.send(error);
@@ -122,7 +149,6 @@ router.get('/recipes/:id', async (req, res) => {
 router.get('/diets', async function (req, res) {
     try {
         let dietsPg = await Diet.findAll();
-        console.log(dietsPg)
         dietsPg ? res.json(dietsPg) : res.status(404).send('Not found')
     } catch (error) {
         res.send(error);

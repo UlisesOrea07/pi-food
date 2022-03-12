@@ -127,13 +127,14 @@ const SearchBar = ({ recipes }) => {
     }
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (state.title.trim() === '') return null;
         dispatch(getRecipes(state.title));
     }
     return (
         <Container onSubmit={(e) => handleSubmit(e)}>
             <Form>
                 <SearchBox onChange={e => handleChange(e)} />
-                <SearchButton >
+                <SearchButton onClick={handleSubmit}>
                     Buscar
                 </SearchButton>
             </Form>
